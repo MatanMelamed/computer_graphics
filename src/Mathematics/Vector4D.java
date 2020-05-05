@@ -4,6 +4,8 @@ public class Vector4D {
 
     double[] data;
 
+    private static Vector4D perpendicular = new Vector4D(0, 0, 1);
+
     public Vector4D() {
         this(0, 0, 0, 1);
     }
@@ -26,8 +28,14 @@ public class Vector4D {
 
     public double z() { return data[2]; }
 
+    public double w() { return data[3]; }
+
     public double get(int index) {
         return data[index];
+    }
+
+    public Vector4D getPerpendicular() {
+        return this.cross(perpendicular);
     }
 
     public Vector4D minus(Vector4D other) {

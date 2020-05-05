@@ -17,7 +17,7 @@ public class Scene {
 
     private Clipper clipper;
     private View view;
-    private boolean shouldClip = true;
+    private volatile boolean shouldClip = false;
 
     public Scene() {
         this(null);
@@ -31,7 +31,11 @@ public class Scene {
     }
 
     public void ToggleClip() {
-        shouldClip = !shouldClip;
+        if (shouldClip) {
+            shouldClip = false;
+        } else {
+            shouldClip = true;
+        }
     }
 
     public void read(String fileName) {
@@ -51,6 +55,7 @@ public class Scene {
             vertices.add(new Vector4D(
                     Double.parseDouble(vertex[0]),
                     Double.parseDouble(vertex[1]),
+                    Double.parseDouble(vertex[2]),
                     1
             ));
         }
@@ -72,6 +77,7 @@ public class Scene {
             end = applier.multiply(vertices.get(index.y));
 
             if (shouldClip) {
+                g.drawRect(20, 20, (int) view.viewWidth, (int) view.viewHeight);
                 if (view.OutOfViewport(start) && view.OutOfViewport(end)) {
                     continue;
                 }

@@ -59,14 +59,14 @@ public class TransformMatrices {
                     {0, Math.sin(eta), Math.cos(eta), 0},
                     {0, 0, 0, 1}
             });
-        } else if (axis == Axis.Y) {
+        } else if (axis == Axis.Z) {
             result = new Matrix(new double[][]{
                     {Math.cos(eta), -Math.sin(eta), 0, 0},
                     {Math.sin(eta), Math.cos(eta), 0, 0},
                     {0, 0, 1, 0},
                     {0, 0, 0, 1}
             });
-        } else if (axis == Axis.Z) {
+        } else if (axis == Axis.Y) {
             result = new Matrix(new double[][]{
                     {Math.cos(eta), 0, -Math.sin(eta), 0},
                     {0, 1, 0, 0},

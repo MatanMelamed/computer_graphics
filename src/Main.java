@@ -1,6 +1,9 @@
+import Mathematics.Vector4D;
 import Models.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -50,6 +53,7 @@ public class Main {
 
         Run();
 
+        // System.out.println(new Vector4D(1, 0, 0).cross(new Vector4D(0, 0, 1)));
     }
 
 

@@ -6,52 +6,60 @@ import Mathematics.TransformMatrices;
 
 import java.io.File;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class View {
 
-    // 2d params
-    public double windowWidth, windowHeight;
-    public double viewWidth, viewHeight;
-
-    // 3d params
     public Vector4D position;
     public Vector4D lookAt;
     public Vector4D up;
+    public Vector4D window;
+    public double viewWidth, viewHeight;
 
-
-    public Matrix viewModel;
+    public Matrix VM1;
+    public Matrix VM2;
 
     public View() {
         read("resources/example3d.viw");
 
-        Vector4D Zv = position.minus(lookAt).multiply(1 / position.minus(lookAt).magnitude());
-        Vector4D Xv = up.cross(Zv).multiply(1 / up.cross(Zv).magnitude());
+        Vector4D Zv = position.minus(lookAt).multiply(1d / position.minus(lookAt).magnitude());
+        Vector4D Xv = up.cross(Zv).multiply(1d / up.cross(Zv).magnitude());
         Vector4D Yv = Zv.cross(Xv);
 
-        Matrix R = new Matrix(new double[][]{
+        VM1 = new Matrix(new double[][]{
                 {Xv.x(), Xv.y(), Xv.z(), 0},
                 {Yv.x(), Yv.y(), Yv.z(), 0},
                 {Zv.x(), Zv.y(), Zv.z(), 0},
-                {0, 0, 0, 0}
+                {0, 0, 0, 1}
         });
 
-        Matrix T = TransformMatrices.translate(
+
+        VM1 = VM1.mult(TransformMatrices.translate(
                 -position.x(),
                 -position.y(),
-                -position.z());
+                -position.z()));
 
-        viewModel = R.mult(T);
-//        Matrix T = TransformMatrices.translate(-originX, -originY);
-//        Matrix R = TransformMatrices.rotate(angle);
-//        Matrix S = TransformMatrices.scale(
-//                viewWidth / windowWidth,
-//                -viewHeight / windowHeight);
-//        Matrix Tr = TransformMatrices.translate(
-//                viewWidth / 2 + 20,
-//                viewHeight / 2 + 20);
-//        viewModel = Tr.mult(S).mult(R).mult(T);
+        VM2 = vm2();
     }
+
+    private Matrix vm2() {
+        Matrix m = new Matrix(new double[][]{
+                {viewWidth / (window.y() - window.x()), 0, 0, 0},
+                {0, -viewHeight / (window.w() - window.z()), 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        });
+
+        Matrix t2 = TransformMatrices.translate(
+                viewHeight / 2 + 20,
+                viewWidth / 2 + 20,
+                0);
+        Matrix t1 = TransformMatrices.translate(
+                window.x() + ((window.y() - window.x()) / 2),
+                window.z() + ((window.w() - window.z()) / 2),
+                0);
+        return t2.mult(m).mult(t1);
+    }
+
 
     public void read(String fileName) {
         Scanner scanner = null;
@@ -83,12 +91,16 @@ public class View {
                 Double.parseDouble(upString[3]));
 
         String[] worldCoord = scanner.nextLine().split(" ");
-        windowWidth = Integer.parseInt(worldCoord[1]);
-        windowHeight = Integer.parseInt(worldCoord[2]);
+        window = new Vector4D(
+                Double.parseDouble(worldCoord[1]),
+                Double.parseDouble(worldCoord[2]),
+                Double.parseDouble(worldCoord[3]),
+                Double.parseDouble(worldCoord[4])
+        );
 
         String[] viewport = scanner.nextLine().split(" ");
-        viewWidth = Integer.parseInt(worldCoord[1]);
-        viewHeight = Integer.parseInt(worldCoord[2]);
+        viewWidth = Integer.parseInt(viewport[1]);
+        viewHeight = Integer.parseInt(viewport[2]);
     }
 
     boolean OutOfViewport(Vector4D vector) {

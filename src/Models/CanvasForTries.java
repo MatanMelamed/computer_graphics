@@ -2,6 +2,7 @@ package Models;
 
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,21 @@ public class CanvasForTries extends BaseMouseHandlerCanvas {
 
     @Override
     protected void ReleaseEvent() {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }

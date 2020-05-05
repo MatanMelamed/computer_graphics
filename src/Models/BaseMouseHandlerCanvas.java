@@ -1,11 +1,9 @@
 package Models;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
-public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseListener, MouseMotionListener {
+public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseListener, MouseMotionListener, KeyListener {
 
     int width, height;
     Point start, end;
@@ -17,6 +15,7 @@ public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseList
         setSize(w, h);
         addMouseListener(this);
         addMouseMotionListener(this);
+        addKeyListener(this);
     }
 
     public void paint(Graphics g) {
@@ -26,6 +25,8 @@ public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseList
             g.drawLine(start.x, start.y, end.x, end.y);
         }
     }
+
+
 
     int[] pointToSquareCoordinate(Point point) {
         return new int[]{point.y / (height / 3), point.x / (width / 3)};
@@ -73,6 +74,20 @@ public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }
