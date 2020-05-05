@@ -2,7 +2,12 @@ package Mathematics;
 
 public class Matrix {
 
-    public static Matrix I = new Matrix(new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+    public static Matrix I = new Matrix(new double[][]{
+            {1, 0, 0, 0},
+            {0, 1, 0, 0},
+            {0, 0, 1, 0},
+            {0, 0, 0, 1}
+    });
 
     public int rows, cols;
     public double[][] data;
@@ -36,7 +41,7 @@ public class Matrix {
         return new Matrix(newData);
     }
 
-    public ThreeDVector multiply(ThreeDVector vector) {
+    public Vector4D multiply(Vector4D vector) {
         double[] newData = new double[rows];
 
         for (int i = 0; i < rows; i++) {
@@ -47,7 +52,7 @@ public class Matrix {
             newData[i] = s;
         }
 
-        return new ThreeDVector(newData[0], newData[1], newData[2]);
+        return new Vector4D(newData[0], newData[1], newData[2]);
     }
 
     @Override

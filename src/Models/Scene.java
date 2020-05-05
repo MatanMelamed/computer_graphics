@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import Mathematics.Matrix;
-import Mathematics.ThreeDVector;
+import Mathematics.Vector4D;
 
 
 public class Scene {
 
-    private List<ThreeDVector> vertices;
+    private List<Vector4D> vertices;
     private List<Point> edgesByVerticesIndexes;
 
     private Clipper clipper;
@@ -48,7 +48,7 @@ public class Scene {
         int numberOfVertices = Integer.parseInt(scanner.nextLine());
         for (int i = 0; i < numberOfVertices; i++) {
             String[] vertex = scanner.nextLine().split(" ");
-            vertices.add(new ThreeDVector(
+            vertices.add(new Vector4D(
                     Double.parseDouble(vertex[0]),
                     Double.parseDouble(vertex[1]),
                     1
@@ -66,7 +66,7 @@ public class Scene {
 
 
     void draw(Graphics g, Matrix applier) {
-        ThreeDVector start, end;
+        Vector4D start, end;
         for (Point index : edgesByVerticesIndexes) {
             start = applier.multiply(vertices.get(index.x));
             end = applier.multiply(vertices.get(index.y));
@@ -75,7 +75,7 @@ public class Scene {
                 if (view.OutOfViewport(start) && view.OutOfViewport(end)) {
                     continue;
                 }
-                ThreeDVector[] newEdges = clipper.ClipEdge(start, end);
+                Vector4D[] newEdges = clipper.ClipEdge(start, end);
                 start = newEdges[0];
                 end = newEdges[1];
             }

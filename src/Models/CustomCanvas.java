@@ -1,7 +1,7 @@
 package Models;
 
 import Mathematics.Matrix;
-import Mathematics.ThreeDVector;
+import Mathematics.Vector4D;
 import Mathematics.TransformMatrices;
 
 import java.awt.*;
@@ -10,7 +10,7 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
 
     private Scene scene;
     private View view;
-    private ThreeDVector screenCenter;
+    private Vector4D screenCenter;
 
     private Matrix totalTransformation;
     private Matrix currentTransformation;
@@ -20,7 +20,7 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
         super((int) newView.viewWidth + 40, (int) newView.viewHeight + 40);
         view = newView;
 
-        screenCenter = new ThreeDVector(view.viewWidth / 2, view.viewHeight / 2, 0);
+        screenCenter = new Vector4D(view.viewWidth / 2, view.viewHeight / 2, 0);
         System.out.println(screenCenter);
 
         scene = new Scene(view);
@@ -48,8 +48,8 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
 
     void applyMouseController(int xIndex, int yIndex) {
 
-        ThreeDVector startVector = new ThreeDVector(start.x, start.y).minus(screenCenter);
-        ThreeDVector endVector = new ThreeDVector(end.x, end.y).minus(screenCenter);
+        Vector4D startVector = new Vector4D(start.x, start.y).minus(screenCenter);
+        Vector4D endVector = new Vector4D(end.x, end.y).minus(screenCenter);
 
         if (xIndex == 1 && yIndex == 1) { // translate
             double dx = end.x - start.x;

@@ -1,19 +1,23 @@
 package Mathematics;
 
-public class ThreeDVector {
+public class Vector4D {
 
     double[] data;
 
-    public ThreeDVector() {
-        this(0, 0, 0);
+    public Vector4D() {
+        this(0, 0, 0, 1);
     }
 
-    public ThreeDVector(double x, double y) {
-        this(x, y, 0);
+    public Vector4D(double x, double y) {
+        this(x, y, 1);
     }
 
-    public ThreeDVector(double x, double y, double z) {
-        this.data = new double[]{x, y, z};
+    public Vector4D(double x, double y, double z) {
+        this(x, y, z, 1);
+    }
+
+    public Vector4D(double x, double y, double z, double w) {
+        this.data = new double[]{x, y, z, w};
     }
 
     public double x() { return data[0]; }
@@ -26,34 +30,34 @@ public class ThreeDVector {
         return data[index];
     }
 
-    public ThreeDVector minus(ThreeDVector other) {
-        return new ThreeDVector(
+    public Vector4D minus(Vector4D other) {
+        return new Vector4D(
                 data[0] - other.data[0],
                 data[1] - other.data[1],
                 data[2] - other.data[2]);
     }
 
-    public ThreeDVector multiply(int scalar) {
-        return new ThreeDVector(
+    public Vector4D multiply(double scalar) {
+        return new Vector4D(
                 data[0] * scalar,
                 data[1] * scalar,
                 data[2] * scalar);
     }
 
-    public ThreeDVector cross(ThreeDVector other) {
-        return new ThreeDVector(
+    public Vector4D cross(Vector4D other) {
+        return new Vector4D(
                 data[1] * other.data[2] - data[2] * other.data[1],
                 data[2] * other.data[0] - data[0] * other.data[2],
                 data[0] * other.data[1] - data[1] * other.data[0]);
     }
 
     public double angle() {
-        double result = Math.toDegrees(Math.atan2(y(),x()));
+        double result = Math.toDegrees(Math.atan2(y(), x()));
         return result < 0 ? 360 + result : result;
 
     }
 
-    public double dot(ThreeDVector other) {
+    public double dot(Vector4D other) {
         double result = 0;
         for (int i = 0; i < 3; i++) {
             result += data[i] * other.data[i];
@@ -66,12 +70,12 @@ public class ThreeDVector {
         return Math.sqrt(dot(this));
     }
 
-    public ThreeDVector normalize() {
+    public Vector4D normalize() {
         double magnitude = magnitude();
-        return new ThreeDVector(x() / magnitude, y() / magnitude, z() / magnitude);
+        return new Vector4D(x() / magnitude, y() / magnitude, z() / magnitude);
     }
 
-    public double angleBetween(ThreeDVector other) {
+    public double angleBetween(Vector4D other) {
         return Math.acos(this.dot(other) / (this.magnitude() * other.magnitude()));
     }
 

@@ -1,14 +1,14 @@
 package Models;
 
 import Mathematics.Matrix;
-import Mathematics.ThreeDVector;
+import Mathematics.Vector4D;
 
 import java.awt.*;
 
 public class ViewConverter {
 
-    Matrix WorldToView(Point vCenter, ThreeDVector vUp) {
-        ThreeDVector u = vUp.cross(new ThreeDVector(0, 0, 1));
+    Matrix WorldToView(Point vCenter, Vector4D vUp) {
+        Vector4D u = vUp.cross(new Vector4D(0, 0, 1));
         return new Matrix(new double[][]{
                 {u.x(), u.y(), 0},
                 {vUp.x(), vUp.y(), 0},

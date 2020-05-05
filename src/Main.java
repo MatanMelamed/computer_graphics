@@ -1,4 +1,3 @@
-import Mathematics.ThreeDVector;
 import Models.*;
 
 import java.awt.*;
