@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import Mathematics.Vector4D;
@@ -5,7 +6,7 @@ import Mathematics.Vector4D;
 public class Clipper {
 
     private Vector4D[] screenPoints;
-    private Vector4D[] normals;
+    public Vector4D[] normals;
 
 
     public Clipper(View view) {

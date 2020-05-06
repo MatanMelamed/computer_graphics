@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Mathematics;
 
 public class Vector4D {
@@ -91,7 +92,7 @@ public class Vector4D {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < data.length; i++) {
             stringBuilder.append(data[i]).append(" ");
         }
         stringBuilder.append(")");

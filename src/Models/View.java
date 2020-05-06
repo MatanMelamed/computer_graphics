@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import Mathematics.Matrix;
@@ -9,59 +10,18 @@ import java.util.Scanner;
 
 public class View {
 
-    public Vector4D position;
-    public Vector4D lookAt;
-    public Vector4D up;
-    public Vector4D window;
-    public double viewWidth, viewHeight;
+    Vector4D position;
+    Vector4D lookAt;
+    Vector4D up;
+    Vector4D window;
+    double viewWidth, viewHeight;
 
-    public Matrix VM1;
-    public Matrix VM2;
+    Matrix VM1;
+    Matrix VM2;
 
-    public View() {
-        read("resources/example3d.viw");
+    public View() {}
 
-        Vector4D Zv = position.minus(lookAt).multiply(1d / position.minus(lookAt).magnitude());
-        Vector4D Xv = up.cross(Zv).multiply(1d / up.cross(Zv).magnitude());
-        Vector4D Yv = Zv.cross(Xv);
-
-        VM1 = new Matrix(new double[][]{
-                {Xv.x(), Xv.y(), Xv.z(), 0},
-                {Yv.x(), Yv.y(), Yv.z(), 0},
-                {Zv.x(), Zv.y(), Zv.z(), 0},
-                {0, 0, 0, 1}
-        });
-
-
-        VM1 = VM1.mult(TransformMatrices.translate(
-                -position.x(),
-                -position.y(),
-                -position.z()));
-
-        VM2 = vm2();
-    }
-
-    private Matrix vm2() {
-        Matrix m = new Matrix(new double[][]{
-                {viewWidth / (window.y() - window.x()), 0, 0, 0},
-                {0, -viewHeight / (window.w() - window.z()), 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}
-        });
-
-        Matrix t2 = TransformMatrices.translate(
-                viewHeight / 2 + 20,
-                viewWidth / 2 + 20,
-                0);
-        Matrix t1 = TransformMatrices.translate(
-                window.x() + ((window.y() - window.x()) / 2),
-                window.z() + ((window.w() - window.z()) / 2),
-                0);
-        return t2.mult(m).mult(t1);
-    }
-
-
-    public void read(String fileName) {
+    private void ParseFile(String fileName) {
         Scanner scanner = null;
         try {
             File file = new File(fileName);
@@ -103,9 +63,68 @@ public class View {
         viewHeight = Integer.parseInt(viewport[2]);
     }
 
-    boolean OutOfViewport(Vector4D vector) {
-        boolean d = vector.x() > viewWidth + 20 || vector.x() < 20 || vector.y() > viewHeight + 20 || vector.y() < 20;
-        return d;
+    private void InitAfterFileParsing() {
+        Vector4D Zv = position.minus(lookAt).multiply(1d / position.minus(lookAt).magnitude());
+        Vector4D Xv = up.cross(Zv).multiply(1d / up.cross(Zv).magnitude());
+        Vector4D Yv = Zv.cross(Xv);
+        VM1 = new Matrix(new double[][]{
+                {Xv.x(), Xv.y(), Xv.z(), 0},
+                {Yv.x(), Yv.y(), Yv.z(), 0},
+                {Zv.x(), Zv.y(), Zv.z(), 0},
+                {0, 0, 0, 1}
+        });
+        VM1 = VM1.mult(TransformMatrices.translate(
+                -position.x(),
+                -position.y(),
+                -position.z()));
+
+        VM2 = GetVm2();
+    }
+
+    void read(String fileName) {
+        ParseFile(fileName);
+        InitAfterFileParsing();
+    }
+
+
+    private Matrix GetVm2() {
+        Matrix m = new Matrix(new double[][]{
+                {viewWidth / (window.y() - window.x()), 0, 0, 0},
+                {0, -viewHeight / (window.w() - window.z()), 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        });
+
+        Matrix t2 = TransformMatrices.translate(
+                viewHeight / 2 + 20,
+                viewWidth / 2 + 20,
+                0);
+        Matrix t1 = TransformMatrices.translate(
+                window.x() + ((window.y() - window.x()) / 2),
+                window.z() + ((window.w() - window.z()) / 2),
+                0);
+        return t2.mult(m).mult(t1);
+    }
+
+    private int GetPointCode(Vector4D point) {
+        int result = 0;
+        if (point.x() < 20) {
+            result += 0b0001;
+        } else if (point.x() > viewWidth + 20) {
+            result += 0b0010;
+        }
+
+        if (point.y() < 20) {
+            result += 0b1000;
+        } else if (point.y() > viewHeight + 20) {
+            result += 0b0100;
+        }
+
+        return result;
+    }
+
+    boolean IsLineCrossView(Vector4D p0, Vector4D p1) {
+        return (GetPointCode(p0) & GetPointCode(p1)) == 0;
     }
 
 }

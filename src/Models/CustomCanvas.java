@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import Mathematics.Matrix;
@@ -6,6 +7,8 @@ import Mathematics.TransformMatrices;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomCanvas extends BaseMouseHandlerCanvas {
 
@@ -15,41 +18,59 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
 
     private Matrix totalTransformation;
     private Matrix currentTransformation;
-    private Matrix m;
 
-    public TransformMatrices.Axis currentAxis;
+    private TransformMatrices.Axis currentAxis;
 
-    public CustomCanvas(View newView) {
-        super((int) newView.viewWidth + 40, (int) newView.viewHeight + 40);
-        view = newView;
+    private Map<Character, Runnable> keyPressHandlers;
 
-        m = new Matrix(4, 4);
-
-        currentAxis = TransformMatrices.Axis.X;
-
-        screenCenter = new Vector4D(view.viewWidth / 2, view.viewHeight / 2, 0);
+    public CustomCanvas() {
+        view = new View();
+        view.read("ex1.viw");
 
         scene = new Scene(view);
-        scene.read("resources/example3d.scn");
+        scene.read("ex1.scn");
 
+        currentAxis = TransformMatrices.Axis.X;
+        screenCenter = new Vector4D(view.viewWidth / 2, view.viewHeight / 2, 0);
         totalTransformation = Matrix.I;
         currentTransformation = Matrix.I;
+
+        BaseInit((int) view.viewWidth + 40, (int) view.viewHeight + 40);
+        InitKeyPressHandlers();
+    }
+
+    private void InitKeyPressHandlers() {
+        keyPressHandlers = new HashMap<>();
+        keyPressHandlers.put('x', () -> currentAxis = TransformMatrices.Axis.X);
+        keyPressHandlers.put('y', () -> currentAxis = TransformMatrices.Axis.Y);
+        keyPressHandlers.put('z', () -> currentAxis = TransformMatrices.Axis.Z);
+        keyPressHandlers.put('c', () -> {
+            scene.ToggleClip();
+            repaint();
+        });
+        keyPressHandlers.put('r', () -> {
+            currentTransformation = Matrix.I;
+            totalTransformation = Matrix.I;
+            repaint();
+        });
+        keyPressHandlers.put('l', () -> {
+            view.read("ex1.viw");
+            scene.read("ex1.scn");
+            repaint();
+        });
+        keyPressHandlers.put('q', () -> System.exit(0));
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        // Matrix finalTransformation = currentTransformation.mult(totalTransformation).mult(view.viewModel);
-        Matrix finalTransformation = view.VM2.mult(Matrix.I).mult(currentTransformation)
-                .mult(totalTransformation).mult(view.VM1);
+        Matrix finalTransformation = view.VM2
+                .mult(Matrix.I)
+                .mult(currentTransformation)
+                .mult(totalTransformation)
+                .mult(view.VM1);
         scene.draw(g, finalTransformation);
-    }
-
-    void drawGrid(Graphics g) {
-        for (int i = 0; i < 2; i++) {
-            g.drawLine((i + 1) * width / 3, 0, (i + 1) * width / 3, height);
-            g.drawLine(0, (i + 1) * height / 3, width, (i + 1) * height / 3);
-        }
+        g.drawRect(20, 20, (int) view.viewWidth, (int) view.viewHeight);
     }
 
     void applyMouseController(int xIndex, int yIndex) {
@@ -61,18 +82,21 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
         Matrix Tnot = TransformMatrices.translate(0, 0, view.position.minus(view.lookAt).z());
 
         if (xIndex == 1 && yIndex == 1) { // translate
-            double dx = end.x - start.x;
-            double dy = end.y - start.y;
+            double windowWidth = view.window.y() - view.window.x();
+            double windowHeight = view.window.w() - view.window.z();
+            double dx = (end.x - start.x) * windowWidth / view.viewWidth;
+            double dy = -1d * (end.y - start.y) * (windowHeight / view.viewWidth);
 
-            Matrix M = TransformMatrices.translate(dx, dy, 0);
-            currentTransformation = M;
+            currentTransformation = TransformMatrices.translate(dx, dy, 1);
         } else if (Math.abs(xIndex - yIndex) == 1) { // scale
             double sf = endVector.magnitude() / startVector.magnitude();
             Matrix S = TransformMatrices.scale(sf, sf, sf);
+
             currentTransformation = T.mult(S).mult(Tnot);
         } else { // rotate
             double angle = endVector.angle() - startVector.angle();
             Matrix R = TransformMatrices.rotate(Math.toRadians(angle), currentAxis);
+
             currentTransformation = T.mult(R).mult(Tnot);
         }
     }
@@ -87,22 +111,13 @@ public class CustomCanvas extends BaseMouseHandlerCanvas {
     protected void ReleaseEvent() {
         totalTransformation = currentTransformation.mult(totalTransformation);
         currentTransformation = Matrix.I;
-        requestFocus();
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         char chosen = e.getKeyChar();
-        System.out.println(e.getKeyChar());
-        if (chosen == 'x') {
-            currentAxis = TransformMatrices.Axis.X;
-        } else if (chosen == 'y') {
-            currentAxis = TransformMatrices.Axis.Y;
-        } else if (chosen == 'z') {
-            currentAxis = TransformMatrices.Axis.Z;
-        } else if (chosen == 'c') {
-            scene.ToggleClip();
-            repaint();
+        if (keyPressHandlers.containsKey(chosen)) {
+            keyPressHandlers.get(chosen).run();
         }
     }
 }

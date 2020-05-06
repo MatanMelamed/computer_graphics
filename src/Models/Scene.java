@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import Mathematics.Matrix;
 import Mathematics.Vector4D;
 
 
-public class Scene {
+class Scene {
 
     private List<Vector4D> vertices;
     private List<Point> edgesByVerticesIndexes;
@@ -19,26 +20,14 @@ public class Scene {
     private View view;
     private volatile boolean shouldClip = false;
 
-    public Scene() {
-        this(null);
-    }
-
-    public Scene(View newView) {
+    Scene(View newView) {
         vertices = new ArrayList<>();
         edgesByVerticesIndexes = new ArrayList<>();
         view = newView;
         clipper = new Clipper(view);
     }
 
-    public void ToggleClip() {
-        if (shouldClip) {
-            shouldClip = false;
-        } else {
-            shouldClip = true;
-        }
-    }
-
-    public void read(String fileName) {
+    private void ParseFile(String fileName) {
         Scanner scanner = null;
         try {
             File file = new File(fileName);
@@ -69,6 +58,19 @@ public class Scene {
         }
     }
 
+    void read(String fileName) {
+        vertices.clear();
+        edgesByVerticesIndexes.clear();
+        ParseFile(fileName);
+    }
+
+    void ToggleClip() {
+        if (shouldClip) {
+            shouldClip = false;
+        } else {
+            shouldClip = true;
+        }
+    }
 
     void draw(Graphics g, Matrix applier) {
         Vector4D start, end;
@@ -77,8 +79,7 @@ public class Scene {
             end = applier.multiply(vertices.get(index.y));
 
             if (shouldClip) {
-                g.drawRect(20, 20, (int) view.viewWidth, (int) view.viewHeight);
-                if (view.OutOfViewport(start) && view.OutOfViewport(end)) {
+                if (!view.IsLineCrossView(start, end)) {
                     continue;
                 }
                 Vector4D[] newEdges = clipper.ClipEdge(start, end);
@@ -89,6 +90,4 @@ public class Scene {
             g.drawLine((int) start.x(), (int) start.y(), (int) end.x(), (int) end.y());
         }
     }
-
-
 }

@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import java.awt.*;
@@ -9,7 +10,9 @@ public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseList
     Point start, end;
     boolean shouldPaintMouseLine = false;
 
-    public BaseMouseHandlerCanvas(int w, int h) {
+    BaseMouseHandlerCanvas() { }
+
+    void BaseInit(int w, int h) {
         width = w;
         height = h;
         setSize(w, h);
@@ -25,7 +28,6 @@ public abstract class BaseMouseHandlerCanvas extends Canvas implements MouseList
             g.drawLine(start.x, start.y, end.x, end.y);
         }
     }
-
 
 
     int[] pointToSquareCoordinate(Point point) {
