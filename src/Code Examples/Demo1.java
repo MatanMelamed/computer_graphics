@@ -77,6 +77,7 @@ public class Demo1 extends KeyAdapter implements GLEventListener {
 		// Get the GL corresponding to the drawable we are animating
 		GL2 gl = drawable.getGL().getGL2();
 
+		// red, green, blue and alpha values to clear screen with - 0,0,0,0 is white
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT);

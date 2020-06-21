@@ -1,7 +1,5 @@
 package Models;
 
-import Mathematics.Vector4D;
-
 enum Axis {
     X,
     Y,
