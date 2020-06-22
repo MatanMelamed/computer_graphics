@@ -123,7 +123,7 @@ public class TextureDemo extends KeyAdapter implements GLEventListener {
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);  
         gl.glEnable(GL2.GL_TEXTURE_2D);
         try {
-    		String filename="resources/Picture1.jpg"; // the FileName to open
+    		String filename="resources/wood_box.jpg"; // the FileName to open
     		texture=TextureIO.newTexture(new File( filename ),true);
         } catch (IOException e) {
             e.printStackTrace();

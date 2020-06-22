@@ -147,7 +147,7 @@ public class LightDemo extends KeyAdapter implements GLEventListener {
         // Texture
         gl.glEnable(GL.GL_TEXTURE_2D);
         try {
-    		String filename="resources/Picture1.jpg"; // the FileName to open
+    		String filename="resources/wood_box.jpg"; // the FileName to open
     		texture=TextureIO.newTexture(new File( filename ),true);
         } catch (IOException e) {
             e.printStackTrace();

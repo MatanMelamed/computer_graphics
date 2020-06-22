@@ -1,75 +1,70 @@
 package Graphics;
 
-import com.jogamp.newt.Window;
-import com.jogamp.newt.event.awt.AWTKeyAdapter;
-
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLCanvas;
+import java.awt.*;
 
 
-public class Renderer extends BaseRenderer {
+public class Renderer {
+
+    // members
+    private Frame frame;
+    private GLCanvas canvas;
+    private boolean isInit;
+    private GLProfile profile;
 
     //region Singleton
     private static Renderer instance = new Renderer();
 
-    public static Renderer getInstance() { return instance;}
-
     private Renderer() {
-        super();
+        canvas = new GLCanvas();
+        isInit = false;
+        profile = GLProfile.get("GL2");
     }
     //endregion
 
-    private boolean isInit = false;
+    // Class API
 
-    public static void Initialize(String name, int width, int height) {
-        instance.isInit = true;
-        instance.initialize(name, width, height);
+    public static void Initialize(String appName, int width, int height) {
+        instance.initialize(appName, width, height);
     }
 
-    public static void Run() {
-        if (instance.isInit) {
-            instance.start();
-        } else {
-            System.out.println("Cannot start renderer without init.");
+    public static void Render() {
+        instance.render();
+    }
+
+    public static GLProfile GetProfile() {
+        return instance.profile;
+    }
+
+
+    // Private implementations
+
+    private void initialize(String appName, int width, int height) {
+        isInit = true;
+        frame = new Frame(appName);
+        frame.setSize(width, height);
+        frame.setLayout(new BorderLayout());
+        frame.add(canvas, java.awt.BorderLayout.CENTER);
+        frame.validate();
+        frame.setVisible(true);
+        canvas.addGLEventListener(GraphicsEventListener.getInstance());
+        canvas.requestFocus();
+    }
+
+    private void render() {
+        if (!isInit) {
+            System.out.println("\n\nERROR :: Tried to render without initializing renderer.\n\n");
+            return;
         }
+        canvas.display();
     }
 
-
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-
-        gl.glClearDepth(1.0f); // Depth Buffer Setup
-        gl.glEnable(GL2.GL_DEPTH_TEST); // Enables Depth Testing
-        gl.glDepthFunc(GL2.GL_LEQUAL); // The Type Of Depth Testing To Do
-
-        // Really Nice Perspective Calculations
-        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
-
-        // keyboard
-        if (drawable instanceof Window) {
-            Window window = (Window) drawable;
-            window.addKeyListener(this);
-        } else if (GLProfile.isAWTAvailable() && drawable instanceof java.awt.Component) {
-            java.awt.Component comp = (java.awt.Component) drawable;
-            new AWTKeyAdapter(this, drawable).addTo(comp);
-        }
+    public static int GetWindowWidth(){
+        return instance.canvas.getWidth();
     }
 
-    @Override
-    public void dispose(GLAutoDrawable drawable) {
-
+    public static int GetWindowHeight(){
+        return instance.canvas.getHeight();
     }
-
-    @Override
-    public void display(GLAutoDrawable drawable) {
-        // Get the GL corresponding to the drawable we are animating
-        GL2 gl = drawable.getGL().getGL2();
-
-        // red, green, blue and alpha values to clear screen with - 0,0,0,0 is white
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
-    }
-
 }
