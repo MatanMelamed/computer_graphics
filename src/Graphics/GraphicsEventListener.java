@@ -78,7 +78,7 @@ public class GraphicsEventListener implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();  // Reset The View
         WorldManager.SetLookAt(glu);
-        glu.gluLookAt(0, 0, 0, InputManager.x, InputManager.y, InputManager.z, 0, 1, 0);
+        // glu.gluLookAt(0, 0, 0, InputManager.x, InputManager.y, InputManager.z, 0, 1, 0);
         gl.glPushMatrix();
 
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);

@@ -51,9 +51,32 @@ public class Vector3D {
                 x * other.y - y * other.x);
     }
 
-    public double angle() {
-        double result = Math.toDegrees(Math.atan2(y, x));
-        return result < 0 ? 360 + result : result;
+    public Vector3D plusSelf(Vector3D other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return this;
+    }
+
+    public Vector3D minusSelf(Vector3D other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return this;
+    }
+
+    public Vector3D multiplySelf(double scalar) {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return this;
+    }
+
+    public Vector3D crossSelf(Vector3D other) {
+        x = x * other.z - z * other.y;
+        y = z * other.x - x * other.z;
+        z = x * other.y - y * other.x;
+        return this;
     }
 
     public double dot(Vector3D other) {
@@ -62,6 +85,11 @@ public class Vector3D {
 
     public double magnitude() {
         return Math.sqrt(dot(this));
+    }
+
+    public double angle() {
+        double result = Math.toDegrees(Math.atan2(y, x));
+        return result < 0 ? 360 + result : result;
     }
 
     public Vector3D normalize() {

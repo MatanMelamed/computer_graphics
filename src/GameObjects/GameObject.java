@@ -33,10 +33,15 @@ public abstract class GameObject implements Drawable {
 
     @Override
     public final void draw() {
-        Graphics.Translate((float) -cs.position.x, (float) cs.position.y, (float) -cs.position.z);
+        Graphics.Translate((float) -cs.Position.x, (float) cs.Position.y, (float) -cs.Position.z);
         drawInPlace();
-        Graphics.Translate((float) cs.position.x, (float) -cs.position.y, (float) cs.position.z);
+        Graphics.Translate((float) cs.Position.x, (float) -cs.Position.y, (float) cs.Position.z);
     }
 
     protected abstract void drawInPlace();
+
+    @Override
+    public String toString() {
+        return String.format("Player :: %s",cs);
+    }
 }

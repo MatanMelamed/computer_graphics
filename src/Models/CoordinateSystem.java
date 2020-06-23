@@ -1,24 +1,24 @@
 package Models;
 
 public class CoordinateSystem {
-    public Vector3D position;
+    public Vector3D Position;
     public Vector3D DirX, DirY, DirZ;
 
     public CoordinateSystem(Vector3D newOrigin) {
-        position = newOrigin;
-        DirX = new Vector3D();
-        DirY = new Vector3D();
-        DirZ = new Vector3D();
+        Position = newOrigin;
+        DirX = new Vector3D(1, 0, 0);
+        DirY = new Vector3D(0, 1, 0);
+        DirZ = new Vector3D(0, 0, -1);
     }
 
     public void SetPosition(float x, float y, float z) {
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
+        this.Position.x = x;
+        this.Position.y = y;
+        this.Position.z = z;
     }
 
     public void move(Vector3D deltaMove) {
-        position = position.plus(deltaMove);
+        Position = Position.plus(deltaMove);
     }
 
     public void rotate(Axis axis, double angle) {
@@ -35,11 +35,15 @@ public class CoordinateSystem {
             b = DirY;
         }
 
-        a = a.multiply(Math.cos(angle)).plus(b.multiply(Math.sin(angle)));
-        b = a.multiply(Math.sin(angle) * -1d).plus(b.multiply(Math.cos(angle)));
+        a.multiplySelf(Math.cos(angle)).plusSelf(b.multiply(Math.sin(angle)));
+        b.multiplySelf(Math.cos(angle)).plusSelf(a.multiply(Math.sin(angle)* -1d));
+        // b = a.multiply(Math.sin(angle) * -1d).plus(b.multiply(Math.cos(angle)));
         a.normalizeSelf();
         b.normalizeSelf();
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("Pos: %s, Dir: (x: %s, y: %s, z: %s)", Position, DirX, DirY, DirZ);
+    }
 }

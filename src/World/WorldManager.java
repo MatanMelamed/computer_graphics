@@ -15,7 +15,7 @@ public class WorldManager {
 
     private WorldManager() {
         currentWorld = new World1();
-        // Player = new PlayerObject("white_squrare.png");
+         Player = new PlayerObject("white_squrare.png");
     }
 
     public static void Update(float dt) {
@@ -23,11 +23,9 @@ public class WorldManager {
     }
 
     public static void SetLookAt(GLU glu){
-//        CoordinateSystem cs = Player.getCoordinateSystem();
-//        Vector3D direction = cs.position.minus(cs.DirZ);
-
-        // glu.gluLookAt(cs.position.x,cs.position.y,cs.position.z,direction.x,direction.y, direction.z,0,0,0);
-        glu.gluLookAt(0,0,0,0,0, -5,0,0,0);
+        CoordinateSystem cs = Player.getCoordinateSystem();
+        Vector3D direction = cs.Position.minus(cs.DirZ);
+        glu.gluLookAt(cs.Position.x,cs.Position.y,cs.Position.z,direction.x,direction.y, direction.z,0,1,0);
     }
 
     public static void Render() {
