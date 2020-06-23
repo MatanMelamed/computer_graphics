@@ -1,4 +1,4 @@
-package World;
+package GameObjects;
 
 import Graphics.Graphics;
 

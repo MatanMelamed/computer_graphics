@@ -1,34 +1,37 @@
 package World;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
+import GameObjects.PlayerObject;
+import Models.CoordinateSystem;
+import Models.Vector3D;
+
+import javax.media.opengl.glu.GLU;
+
 
 public class WorldManager {
 
-    private BlockingQueue<GameObject> gameObjects;
-
+    private World currentWorld;
+    public static PlayerObject Player;
     private static WorldManager instance = new WorldManager();
 
-    public static WorldManager getInstance() { return instance;}
-
     private WorldManager() {
-        gameObjects = new LinkedBlockingDeque<>();
+        currentWorld = new World1();
+        // Player = new PlayerObject("white_squrare.png");
     }
-
-    public static void AddGameObject(GameObject gameObject) {
-        instance.gameObjects.add(gameObject);
-    }
-
 
     public static void Update(float dt) {
+        instance.currentWorld.Update();
+    }
 
+    public static void SetLookAt(GLU glu){
+//        CoordinateSystem cs = Player.getCoordinateSystem();
+//        Vector3D direction = cs.position.minus(cs.DirZ);
+
+        // glu.gluLookAt(cs.position.x,cs.position.y,cs.position.z,direction.x,direction.y, direction.z,0,0,0);
+        glu.gluLookAt(0,0,0,0,0, -5,0,0,0);
     }
 
     public static void Render() {
-        for (GameObject object : instance.gameObjects) {
-            object.draw();
-        }
+        instance.currentWorld.Render();
+        // instance.Player.draw();
     }
 }

@@ -1,8 +1,9 @@
-package World;
+package GameObjects;
 
 import Core.ResourceManager;
 import Graphics.Drawable;
 import Graphics.Graphics;
+import Models.Axis;
 import Models.CoordinateSystem;
 import Models.ImageResource;
 import Models.Vector3D;
@@ -15,6 +16,10 @@ public abstract class GameObject implements Drawable {
     public GameObject(String imageName) {
         cs = new CoordinateSystem(new Vector3D(0, 0, 0));
         imageResource = ResourceManager.GetImageResourceByName(imageName);
+    }
+
+    public void Rotate(Axis axis, double angle) {
+        cs.rotate(axis, angle);
     }
 
     public void SetPosition(float x, float y, float z) {

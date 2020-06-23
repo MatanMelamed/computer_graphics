@@ -77,6 +77,7 @@ public class GraphicsEventListener implements GLEventListener {
         updateGL(drawable);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();  // Reset The View
+        WorldManager.SetLookAt(glu);
         glu.gluLookAt(0, 0, 0, InputManager.x, InputManager.y, InputManager.z, 0, 1, 0);
         gl.glPushMatrix();
 

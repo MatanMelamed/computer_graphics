@@ -1,20 +1,14 @@
 package Models;
 
-enum Axis {
-    X,
-    Y,
-    Z
-}
-
 public class CoordinateSystem {
     public Vector3D position;
-    public Vector3D x, y, z;
+    public Vector3D DirX, DirY, DirZ;
 
     public CoordinateSystem(Vector3D newOrigin) {
         position = newOrigin;
-        x = new Vector3D();
-        y = new Vector3D();
-        z = new Vector3D();
+        DirX = new Vector3D();
+        DirY = new Vector3D();
+        DirZ = new Vector3D();
     }
 
     public void SetPosition(float x, float y, float z) {
@@ -31,14 +25,14 @@ public class CoordinateSystem {
         angle = Math.toRadians(angle);
         Vector3D a, b;
         if (axis == Axis.X) {
-            a = y;
-            b = z;
+            a = DirY;
+            b = DirZ;
         } else if (axis == Axis.Y) {
-            a = x;
-            b = z;
+            a = DirX;
+            b = DirZ;
         } else { // axis == Axis.Z
-            a = x;
-            b = y;
+            a = DirX;
+            b = DirY;
         }
 
         a = a.multiply(Math.cos(angle)).plus(b.multiply(Math.sin(angle)));

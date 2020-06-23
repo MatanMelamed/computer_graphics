@@ -2,6 +2,8 @@ package Core;
 
 import Graphics.Renderer;
 
+import Models.Axis;
+import World.WorldManager;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -47,11 +49,16 @@ public class InputManager implements KeyListener, MouseListener {
     }
 
 
+    public static void RegisterBinding(short key, Runnable r) {
+        instance.bindings.put(key, r);
+
+    }
+
     public void SetDefaultBinding() {
         bindings.clear();
         bindings.put(KeyEvent.VK_ESCAPE, () -> System.exit(0));
         bindings.put(KeyEvent.VK_P, () -> {
-            System.out.println(String.format("%f %f %f, current angle: %f", x, y, z,currentXAngle));
+            System.out.println(String.format("%f %f %f, current angle: %f", x, y, z, currentXAngle));
         });
     }
 
@@ -70,6 +77,7 @@ public class InputManager implements KeyListener, MouseListener {
         float r = Math.abs(deltaX) / (centerX * 2f) * sens;
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
+        //WorldManager.Player.Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX < 0 ? -1d : 1d)) % 360);
 
         currentXAngle = currentXAngle + angleAddition * (deltaX < 0 ? -1d : 1d);
 
@@ -81,7 +89,6 @@ public class InputManager implements KeyListener, MouseListener {
 
     private void calculateAndSetVerticalAxis(com.jogamp.newt.event.MouseEvent mouseEvent) {
 
-        System.out.println(centerY);
         int deltaY = mouseEvent.getY() - centerY + 31;
 
         float r = Math.abs(deltaY) / (centerY * 2f) * sens;

@@ -1,4 +1,4 @@
-package World;
+package GameObjects;
 
 import Graphics.Graphics;
 
@@ -12,7 +12,8 @@ public class BoxObject extends GameObject {
     @Override
     protected void drawInPlace() {
         //Graphics.Rotate(45, 1.0f, 0, 0);
-        Graphics.drawTexturedRectangle(imageResource, 2f, 1f, 3f);
+        //Graphics.drawTexturedRectangle(imageResource, 2f, 2f, 3f);
+        Graphics.DrawTexturedRectangle(imageResource, 2f, 2f, 3f);
         //Graphics.Rotate(0, -5, 0, 0);
     }
 }
