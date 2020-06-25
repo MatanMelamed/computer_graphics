@@ -1,5 +1,7 @@
 package Graphics;
 
+import com.jogamp.opengl.util.awt.TextRenderer;
+
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import java.awt.*;

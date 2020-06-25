@@ -58,18 +58,6 @@ public class InputManager implements KeyListener, MouseListener {
     public void SetDefaultBinding() {
         bindings.clear();
         bindings.put(KeyEvent.VK_ESCAPE, () -> System.exit(0));
-        bindings.put(KeyEvent.VK_P, () -> {
-            System.out.println(String.format("%f %f %f, current angle: %f", x, y, z, currentXAngle));
-        });
-        bindings.put(KeyEvent.VK_K, () -> {
-            System.out.println(WorldManager.Player);
-        });
-
-        bindings.put(KeyEvent.VK_I, () -> {
-            var cs = WorldManager.Player.getCoordinateSystem();
-            double r = Math.toDegrees(cs.DirZ.angleBetween(cs.DirZ.getPerpendicular()));
-            System.out.println(r);
-        });
     }
 
 
@@ -87,14 +75,15 @@ public class InputManager implements KeyListener, MouseListener {
         float r = Math.abs(deltaX) / (centerX * 2f) * sens;
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
-        WorldManager.Player.Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX < 0 ? -1d : 1d)) % 360);
 
-        currentXAngle = currentXAngle + angleAddition * (deltaX < 0 ? -1d : 1d);
+        WorldManager.Player.Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX > 0 ? 1d : -1d)) % 360);
 
-        x = (float) Math.sin(currentXAngle);
-        z = (float) Math.cos(currentXAngle);
-
-        currentXAngle = Math.toRadians(Math.toDegrees(currentXAngle) % 360);
+//        currentXAngle = currentXAngle + angleAddition * (deltaX > 0 ? 1d : -1d);
+//
+//        x = (float) Math.sin(currentXAngle);
+//        z = (float) Math.cos(currentXAngle);
+//
+//        currentXAngle = Math.toRadians(Math.toDegrees(currentXAngle) % 360);
     }
 
     private void calculateAndSetVerticalAxis(com.jogamp.newt.event.MouseEvent mouseEvent) {
@@ -104,13 +93,13 @@ public class InputManager implements KeyListener, MouseListener {
         float r = Math.abs(deltaY) / (centerY * 2f) * sens;
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
-        WorldManager.Player.Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY < 0 ? -1d : 1d)) % 360);
 
-
-        y += r * (deltaY > 0 ? 1f : -1f);
-
-        y = Math.max(-0.5f, Math.min(0.5f, y));
-
+        WorldManager.Player.Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
+//
+//
+//        y += r * (deltaY > 0 ? 1f : -1f);
+//
+//        y = Math.max(-0.5f, Math.min(0.5f, y));
     }
 
     private void calculateAndSetLookAtVectorValues(com.jogamp.newt.event.MouseEvent mouseEvent) {
@@ -120,7 +109,10 @@ public class InputManager implements KeyListener, MouseListener {
 
     @Override
     public void mouseMoved(com.jogamp.newt.event.MouseEvent mouseEvent) {
-        calculateAndSetLookAtVectorValues(mouseEvent);
+
+        if (mouseEvent.getX() - centerX < 100 && mouseEvent.getY() - centerY < 100) {
+            calculateAndSetLookAtVectorValues(mouseEvent);
+        }
         robot.mouseMove(centerX, centerY);
     }
 

@@ -25,7 +25,15 @@ public class Graphics {
         instance.gl = newGl;
     }
 
-    public static void DrawTexturePlateOnFloor(ImageResource imgResource, float width, float height) {
+    public static void DrawLine(Vector3D start, Vector3D end) {
+        GL2 gl = instance.gl;
+        gl.glBegin(GL2.GL_LINES);
+        gl.glVertex3f((float) start.x, (float) start.y, (float) start.z);
+        gl.glVertex3f((float) end.x, (float) end.y, (float) end.z);
+        gl.glEnd();
+    }
+
+    public static void DrawTexturePlateOnFloorInCenter(ImageResource imgResource, float width, float height) {
         GL2 gl = instance.gl;
 
         Texture tex = imgResource.getTexture();
@@ -40,19 +48,23 @@ public class Graphics {
         height /= 2;
 
         gl.glNormal3f(0, 1, 0);
-        gl.glTexCoord2f(1f, 1f);
-        gl.glVertex3f(-width, 0f, -height);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-width, 0, -height);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-width, 0, height);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(width, 0, height);
+        gl.glTexCoord2f(1.0f, 1.0f);
         gl.glVertex3f(width, 0, -height);
-        gl.glTexCoord2f(0f, 0f);
-        gl.glVertex3f(width, 0f, height);
-        gl.glTexCoord2f(1f, 0f);
-        gl.glVertex3f(-width, 0f, height);
 
         gl.glEnd();
     }
 
-    public static void drawTexturedRectangle(ImageResource imgResource, float width, float height, float depth) {
+    public static void SetColor(float r, float g, float b) {
+        instance.gl.glColor3f(r, g, b);
+    }
+
+    public static void DrawTexturedRectangleInCenter(ImageResource imgResource, float width, float height, float depth) {
         GL2 gl = instance.gl;
 
         Texture tex = imgResource.getTexture();
@@ -129,7 +141,8 @@ public class Graphics {
         gl.glVertex3f(-width, height, -depth);
         gl.glEnd();
     }
-    public static void DrawTexturedRectangle(ImageResource imgResource, float width, float height, float depth) {
+
+    public static void oldDrawTexturedRectangle(ImageResource imgResource, float width, float height, float depth) {
         GL2 gl = instance.gl;
 
         Texture tex = imgResource.getTexture();
@@ -147,7 +160,7 @@ public class Graphics {
         // Front Face
         gl.glBegin(GL2.GL_QUADS);
         // Front Face
-        gl.glNormal3f(0,0,1);
+        gl.glNormal3f(0, 0, 1);
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, 1.0f);
         gl.glTexCoord2f(2f, 0.0f);
@@ -157,7 +170,7 @@ public class Graphics {
         gl.glTexCoord2f(0.0f, 1.0f);
         gl.glVertex3f(-1.0f, 1.0f, 1.0f);
         // Back Face
-        gl.glNormal3f(0,0,-1);
+        gl.glNormal3f(0, 0, -1);
         gl.glTexCoord2f(1.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, -1.0f);
         gl.glTexCoord2f(1.0f, 1.0f);
@@ -167,7 +180,7 @@ public class Graphics {
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(1.0f, -1.0f, -1.0f);
         // Top Face
-        gl.glNormal3f(0,1,0);
+        gl.glNormal3f(0, 1, 0);
         gl.glTexCoord2f(0.0f, 1.0f);
         gl.glVertex3f(-1.0f, 1.0f, -1.0f);
         gl.glTexCoord2f(0.0f, 0.0f);
@@ -177,7 +190,7 @@ public class Graphics {
         gl.glTexCoord2f(1.0f, 1.0f);
         gl.glVertex3f(1.0f, 1.0f, -1.0f);
         // Bottom Face
-        gl.glNormal3f(0,-1,0);
+        gl.glNormal3f(0, -1, 0);
         gl.glTexCoord2f(1.0f, 1.0f);
         gl.glVertex3f(-1.0f, -1.0f, -1.0f);
         gl.glTexCoord2f(0.0f, 1.0f);
@@ -187,7 +200,7 @@ public class Graphics {
         gl.glTexCoord2f(1.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, 1.0f);
         // Right face
-        gl.glNormal3f(1,0,0);
+        gl.glNormal3f(1, 0, 0);
         gl.glTexCoord2f(1.0f, 0.0f);
         gl.glVertex3f(1.0f, -1.0f, -1.0f);
         gl.glTexCoord2f(1.0f, 1.0f);
@@ -197,7 +210,7 @@ public class Graphics {
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(1.0f, -1.0f, 1.0f);
         // Left Face
-        gl.glNormal3f(-1,0,0);
+        gl.glNormal3f(-1, 0, 0);
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, -1.0f);
         gl.glTexCoord2f(1.0f, 0.0f);
@@ -210,8 +223,8 @@ public class Graphics {
     }
 
 
-    public static void Rotate(float x, float y, float z, float w) {
-        instance.gl.glRotatef(x, y, z, w);
+    public static void Rotate(float angle, float xAxis, float yAxis, float zAxis) {
+        instance.gl.glRotatef(angle, xAxis, yAxis, zAxis);
     }
 
     public static void Translate(float x, float y, float z) {

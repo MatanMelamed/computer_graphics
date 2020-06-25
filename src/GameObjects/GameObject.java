@@ -14,7 +14,7 @@ public abstract class GameObject implements Drawable {
     protected ImageResource imageResource;
 
     public GameObject(String imageName) {
-        cs = new CoordinateSystem(new Vector3D(0, 0, 0));
+        cs = new CoordinateSystem();
         imageResource = ResourceManager.GetImageResourceByName(imageName);
     }
 
@@ -33,15 +33,24 @@ public abstract class GameObject implements Drawable {
 
     @Override
     public final void draw() {
-        Graphics.Translate((float) -cs.Position.x, (float) cs.Position.y, (float) -cs.Position.z);
+
+//        double[] angles = cs.AxisAnglesFromWorld();
+//
+//        Graphics.Rotate((float) angles[0], 1, 0, 0);
+//        Graphics.Rotate((float) angles[1], 0, 1, 0);
+//        Graphics.Rotate((float) angles[2], 0, 0, 1);
+
+
+        Graphics.Translate((float) cs.Position.x, (float) cs.Position.y, (float) cs.Position.z);
         drawInPlace();
-        Graphics.Translate((float) cs.Position.x, (float) -cs.Position.y, (float) cs.Position.z);
+        Graphics.Translate((float) -cs.Position.x, (float) -cs.Position.y, (float) -cs.Position.z);
+
     }
 
     protected abstract void drawInPlace();
 
     @Override
     public String toString() {
-        return String.format("Player :: %s",cs);
+        return String.format("Player :: %s", cs);
     }
 }

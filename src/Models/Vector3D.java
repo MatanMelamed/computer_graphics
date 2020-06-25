@@ -9,8 +9,14 @@ public class Vector3D {
 
     private static Vector3D perpendicular = new Vector3D(0, 0, 1);
 
+    public static final Vector3D ZERO = new Vector3D(0, 0, 0);
+
     public Vector3D() {
         this(0, 0, 0);
+    }
+
+    public Vector3D(Vector3D other) {
+        this(other.x, other.y, other.z);
     }
 
     public Vector3D(double x, double y, double z) {
@@ -21,6 +27,12 @@ public class Vector3D {
 
     public Vector3D getPerpendicular() {
         return this.cross(perpendicular);
+    }
+
+    public void Set(Vector3D other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
     }
 
     public Vector3D plus(Vector3D other) {
@@ -51,34 +63,6 @@ public class Vector3D {
                 x * other.y - y * other.x);
     }
 
-    public Vector3D plusSelf(Vector3D other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        return this;
-    }
-
-    public Vector3D minusSelf(Vector3D other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-        return this;
-    }
-
-    public Vector3D multiplySelf(double scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        return this;
-    }
-
-    public Vector3D crossSelf(Vector3D other) {
-        x = x * other.z - z * other.y;
-        y = z * other.x - x * other.z;
-        z = x * other.y - y * other.x;
-        return this;
-    }
-
     public double dot(Vector3D other) {
         return x * other.x + y * other.y + z * other.z;
     }
@@ -97,19 +81,12 @@ public class Vector3D {
         return new Vector3D(x / magnitude, y / magnitude, z / magnitude);
     }
 
-    public void normalizeSelf() {
-        double magnitude = magnitude();
-        x /= magnitude;
-        y /= magnitude;
-        z /= magnitude;
-    }
-
     public double angleBetween(Vector3D other) {
         return Math.acos(this.dot(other) / (this.magnitude() * other.magnitude()));
     }
 
     @Override
     public String toString() {
-        return String.format("(%f, %f, %f)", x, y, z);
+        return String.format("(%.4f, %.4f, %.4f)", x, y, z);
     }
 }
