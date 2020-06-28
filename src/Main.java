@@ -12,23 +12,6 @@ import com.jogamp.newt.event.KeyEvent;
 
 public class Main {
 
-    public static double lastAngle = 0;
-
-    public static void PlayerResetX() {
-
-        if (lastAngle != 0) {
-            WorldManager.Player.Rotate(Axis.X, -lastAngle);
-            lastAngle = 0;
-        } else {
-            lastAngle = WorldManager.Player.getCoordinateSystem().GetXDiv();
-            var cs = WorldManager.Player.getCoordinateSystem();
-            cs.DirX.Set(new Vector3D(cs.DirX.x, 0, cs.DirZ.z).normalize());
-            cs.DirY.Set(CoordinateSystem.WORLD_Y);
-            cs.DirZ.Set(new Vector3D(cs.DirZ.x, 0, cs.DirZ.z).normalize());
-        }
-        System.out.println(lastAngle);
-    }
-
     private static void run() {
         Renderer.Initialize("MyGame", 1366, 768);
         InputManager.Initialize();
@@ -44,13 +27,6 @@ public class Main {
             var cs = WorldManager.Player.getCoordinateSystem();
             return String.format("player CS :: x: %s, y: %s, z: %s", cs.DirX, cs.DirY, cs.DirZ);
         });
-
-
-        InputManager.RegisterBinding(KeyEvent.VK_W, () -> WorldManager.Player.Rotate(Axis.X, -10));
-        InputManager.RegisterBinding(KeyEvent.VK_S, () -> WorldManager.Player.Rotate(Axis.X, 10));
-        InputManager.RegisterBinding(KeyEvent.VK_A, () -> WorldManager.Player.Rotate(Axis.Y, -10));
-        InputManager.RegisterBinding(KeyEvent.VK_D, () -> WorldManager.Player.Rotate(Axis.Y, 10));
-
 
         GameLoop gameLoop = GameLoop.GetInstance();
         gameLoop.Start();

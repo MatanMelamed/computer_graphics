@@ -58,7 +58,7 @@ public class CoordinateSystem {
 
     @Override
     public String toString() {
-        return String.format("Pos: %s, Dir: (x: %s, y: %s, z: %s)", Position, DirX, DirY, DirZ);
+        return String.format("Pos: %s, Dir: (x: %s, y: %s, z: %s), Angles: (x: %.4f, y: %.4f, z: %.4f)", Position, DirX, DirY, DirZ, xDiv, yDiv, zDiv);
     }
 
     public double GetXDiv() {

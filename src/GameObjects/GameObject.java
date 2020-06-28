@@ -10,7 +10,7 @@ import Models.Vector3D;
 
 public abstract class GameObject implements Drawable {
 
-    protected CoordinateSystem cs;
+    public CoordinateSystem cs;
     protected ImageResource imageResource;
 
     public GameObject(String imageName) {
@@ -34,16 +34,21 @@ public abstract class GameObject implements Drawable {
     @Override
     public final void draw() {
 
-//        double[] angles = cs.AxisAnglesFromWorld();
-//
-//        Graphics.Rotate((float) angles[0], 1, 0, 0);
-//        Graphics.Rotate((float) angles[1], 0, 1, 0);
-//        Graphics.Rotate((float) angles[2], 0, 0, 1);
+        double[] angles = cs.AxisAnglesFromWorld();
+
+        Graphics.Rotate((float) angles[0], 1, 0, 0);
+        Graphics.Rotate((float) angles[1], 0, 1, 0);
+        Graphics.Rotate((float) angles[2], 0, 0, 1);
 
 
         Graphics.Translate((float) cs.Position.x, (float) cs.Position.y, (float) cs.Position.z);
         drawInPlace();
         Graphics.Translate((float) -cs.Position.x, (float) -cs.Position.y, (float) -cs.Position.z);
+
+        Graphics.Rotate((float) -angles[2], 0, 0, 1);
+        Graphics.Rotate((float) -angles[1], 0, 1, 0);
+        Graphics.Rotate((float) -angles[0], 1, 0, 0);
+
 
     }
 

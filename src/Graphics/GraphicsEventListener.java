@@ -176,18 +176,9 @@ public class GraphicsEventListener implements GLEventListener {
         // Draw the world
         WorldManager.Render();
 
-        var cs = WorldManager.Player.getCoordinateSystem();
-
-//        gl.glColor3f(1f, 0f, 0f);
-        gl.glLineWidth(10);
-        gl.glBegin(GL2.GL_LINES);
-        gl.glVertex3f(0, 0, 1);
-        gl.glVertex3f(1, 1, 1f);
-        gl.glEnd();
 
         // Enable2D();
         renderDebug();
-
     }
 
     @Override

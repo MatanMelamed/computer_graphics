@@ -18,8 +18,8 @@ public class PlayerObject extends GameObject {
     @Override
     public void Rotate(Axis axis, double angle) {
 
-        double maxLookDownAngle = 40;
-        double maxLookUpAngle = -30;
+        double maxLookDownAngle = 50;
+        double maxLookUpAngle = -50;
 
         if (axis == Axis.X) {
             double currentXAngle = cs.GetXDiv();
