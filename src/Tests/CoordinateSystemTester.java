@@ -2,7 +2,7 @@ package Tests;
 
 import Core.GameLoop;
 import Core.InputManager;
-import Graphics.Renderer;
+import Graphics.WindowManager;
 import Models.Axis;
 import Models.CoordinateSystem;
 import com.jogamp.newt.event.KeyEvent;
@@ -10,7 +10,7 @@ import com.jogamp.newt.event.KeyEvent;
 public class CoordinateSystemTester {
 
     public static void run() {
-        Renderer.Initialize("MyGame", 1366, 768);
+        WindowManager.Initialize("MyGame", 1366, 768);
         InputManager.Initialize();
 
         GameLoop gameLoop = GameLoop.GetInstance();

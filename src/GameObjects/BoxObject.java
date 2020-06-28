@@ -2,7 +2,7 @@ package GameObjects;
 
 import Graphics.Graphics;
 
-public class BoxObject extends GameObject {
+public class BoxObject extends SingleTexturedGameObject {
 
     private float width, height, depth;
 
@@ -14,11 +14,10 @@ public class BoxObject extends GameObject {
         cs.SetPosition(0, 1, 0);
     }
 
+
     @Override
-    protected void drawInPlace() {
-        //Graphics.Rotate(45, 1.0f, 0, 0);
-        Graphics.DrawTexturedRectangleInCenter(imageResource, width,  height, depth);
-        // Graphics.oldDrawTexturedRectangle(imageResource, width, height, depth);
-        //Graphics.Rotate(0, -5, 0, 0);
+    protected void CreateAndSetObjectGLLIst() {
+        objectGLList = Graphics.Create3DTexturedRectangle(width,  height, depth);
     }
+
 }

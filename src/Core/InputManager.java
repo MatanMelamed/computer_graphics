@@ -1,10 +1,8 @@
 package Core;
 
-import Graphics.Renderer;
+import Graphics.WindowManager;
 
 import Models.Axis;
-import Models.Vector3D;
-import World.WorldManager;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -45,8 +43,8 @@ public class InputManager implements KeyListener, MouseListener {
     //endregion
 
     public static void Initialize() {
-        instance.centerX = Renderer.GetWindowWidth() / 2;
-        instance.centerY = Renderer.GetWindowHeight() / 2;
+        instance.centerX = WindowManager.GetWindowWidth() / 2;
+        instance.centerY = WindowManager.GetWindowHeight() / 2;
     }
 
 
@@ -76,7 +74,7 @@ public class InputManager implements KeyListener, MouseListener {
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
 
-        WorldManager.Player.Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX > 0 ? 1d : -1d)) % 360);
+        GameManager.GetPlayer().Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX > 0 ? 1d : -1d)) % 360);
 
 //        currentXAngle = currentXAngle + angleAddition * (deltaX > 0 ? 1d : -1d);
 //
@@ -94,7 +92,7 @@ public class InputManager implements KeyListener, MouseListener {
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
 
-        WorldManager.Player.Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
+        GameManager.GetPlayer().Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
 //
 //
 //        y += r * (deltaY > 0 ? 1f : -1f);

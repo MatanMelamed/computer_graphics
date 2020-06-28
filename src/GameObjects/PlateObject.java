@@ -2,10 +2,10 @@ package GameObjects;
 
 import Graphics.Graphics;
 
-public class PlateObject extends GameObject {
+public class PlateObject extends SingleTexturedGameObject {
 
-    int width;
-    int height;
+    private int width;
+    private int height;
 
     public PlateObject(String imageName, int width, int height) {
         super(imageName);
@@ -14,7 +14,7 @@ public class PlateObject extends GameObject {
     }
 
     @Override
-    protected void drawInPlace() {
-        Graphics.DrawTexturePlateOnFloorInCenter(imageResource, width, height);
+    protected void CreateAndSetObjectGLLIst() {
+        objectGLList = Graphics.Create2DTexturedPlane(width, height);
     }
 }

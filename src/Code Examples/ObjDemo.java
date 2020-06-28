@@ -28,7 +28,7 @@ public class ObjDemo extends KeyAdapter implements GLEventListener {
     private float yrot;        // Y Rotation ( NEW )
     private float zrot;        // Z Rotation ( NEW )
     private Texture texture;
-    private WavefrontObjectLoader_DisplayList axe;
+    private objDemo.WavefrontObjectLoader_DisplayList axe;
 
     static GLU glu = new GLU();
     static GLCanvas canvas = new GLCanvas();

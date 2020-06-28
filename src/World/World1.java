@@ -4,10 +4,8 @@ import Core.InputManager;
 import GameObjects.BoxObject;
 import GameObjects.GameObject;
 import GameObjects.PlateObject;
-import GameObjects.PlayerObject;
-import Graphics.GraphicsEventListener;
+import Graphics.Debugger;
 import Models.Axis;
-import Models.Vector3D;
 import com.jogamp.newt.event.KeyEvent;
 
 
@@ -16,7 +14,7 @@ public class World1 extends BaseWorld {
     public static GameObject pl = new BoxObject("wood_box.jpg", 1, 1,1);
 
     public static void move(int forward, int side, int height) {
-        pl.cs.move(new Vector3D(side, height, forward));
+        pl.Move(side, height, forward);
     }
 
     public static void rot(Axis axis, double angle) {
@@ -24,14 +22,14 @@ public class World1 extends BaseWorld {
     }
 
     public static String print() {
-        return String.format("Plate :: %s ", pl.cs);
+        return String.format("Plate :: %s ", pl);
     }
 
     public World1() {
         BoxObject box;
 
         PlateObject plate = new PlateObject("wood_box.jpg", 16, 16);
-        plate.SetPosition(0, -5, 0);
+        plate.Move(0, -5, 0);
         AddGameObject(plate);
 
         AddGameObject(pl);
@@ -55,12 +53,11 @@ public class World1 extends BaseWorld {
         InputManager.RegisterBinding(KeyEvent.VK_X, () -> rot(Axis.Z, -10));
 
 
-        GraphicsEventListener.AddDebugMessageGenerator(World1::print);
+        Debugger.AddDebug(World1::print);
 
 
         box = new BoxObject("wood_box.jpg", 1, 1, 1);
-        box.SetPosition(8, 6, 0);
+        box.Move(8, 6, 0);
         AddGameObject(box);
     }
-
 }

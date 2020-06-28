@@ -1,6 +1,6 @@
 package Models;
 
-import Graphics.Renderer;
+import Graphics.WindowManager;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
@@ -35,7 +35,7 @@ public class ImageResource {
         }
 
         if (texture == null) {
-            texture = AWTTextureIO.newTexture(Renderer.GetProfile(), image, true);
+            texture = AWTTextureIO.newTexture(WindowManager.GetProfile(), image, true);
         }
 
         return texture;

@@ -1,29 +1,23 @@
 package Core;
 
-import Graphics.Renderer;
-import World.WorldManager;
-import com.jogamp.opengl.util.awt.TextRenderer;
-
-import java.awt.*;
-
 public class GameLoop {
+
+    // execution
+    private static final int MAX_UPDATE = 5;
+    private int updates;
+    private boolean running;
+    private long lastUpdateTime;
+
+    // FPS handle
+    private int targetFPS;
+    private int timeBetweenUpdatesInNanoSec;
+    private float timeBetweenUpdatesInSec;
 
     //region Singleton
     private static GameLoop instance = new GameLoop();
 
     public static GameLoop GetInstance() {return instance;}
     //endregion
-
-    private static final int MAX_UPDATE = 5;
-
-    private int updates;
-    private boolean running;
-    private long lastUpdateTime;
-
-    private int targetFPS;
-    private int timeBetweenUpdatesInNanoSec;
-    private float timeBetweenUpdatesInSec;
-
 
     private GameLoop() {
         running = false;
@@ -36,17 +30,17 @@ public class GameLoop {
         targetFPS = fps;
         timeBetweenUpdatesInNanoSec = 1000000000 / fps;
         timeBetweenUpdatesInSec = 1f / fps;
-        System.out.println(timeBetweenUpdatesInSec);
     }
 
     public void Start() {
+
         Thread thread = new Thread(() -> {
             running = true;
 
             while (running) {
                 long startUpdateTime = System.nanoTime();
-                updateLogic(startUpdateTime);
 
+                updateLogic(startUpdateTime);
                 updateGraphics();
 
                 long timeTaken = System.nanoTime() - startUpdateTime;
@@ -72,7 +66,9 @@ public class GameLoop {
             we supposed to wait between model updates it means there are more model updates that need to be done.
          */
         while (startUpdateTime - lastUpdateTime >= timeBetweenUpdatesInNanoSec) {
-            WorldManager.Update(timeBetweenUpdatesInSec);
+
+            GameManager.UpdateLogic(timeBetweenUpdatesInSec);
+
             lastUpdateTime += timeBetweenUpdatesInNanoSec;
             updates++;
 
@@ -83,6 +79,6 @@ public class GameLoop {
     }
 
     private void updateGraphics() {
-        Renderer.Render();
+        GameManager.UpdateGraphics();
     }
 }

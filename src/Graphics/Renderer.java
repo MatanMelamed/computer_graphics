@@ -1,72 +1,174 @@
 package Graphics;
 
-import com.jogamp.opengl.util.awt.TextRenderer;
+import Core.GameManager;
+import Core.InputManager;
+import com.jogamp.newt.Window;
+import com.jogamp.newt.event.awt.AWTKeyAdapter;
+import com.jogamp.newt.event.awt.AWTMouseAdapter;
 
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
-import java.awt.*;
+import javax.media.opengl.*;
+import javax.media.opengl.glu.GLU;
 
+import static javax.media.opengl.GL.*;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
-public class Renderer {
+public class Renderer implements GLEventListener {
 
     // members
-    private Frame frame;
-    private GLCanvas canvas;
-    private boolean isInit;
-    private GLProfile profile;
+    private GL2 gl = null;
+    private GLU glu = new GLU();
+    private Runnable initCallBack = null;
+    private Runnable displayCallBack = null;
+
+
+    private boolean debuggerEnabled;
 
     //region Singleton
     private static Renderer instance = new Renderer();
 
-    private Renderer() {
-        canvas = new GLCanvas();
-        isInit = false;
-        profile = GLProfile.get("GL2");
-    }
+    public static Renderer getInstance() { return instance;}
+
+    private Renderer() {}
     //endregion
 
-    // Class API
-
-    public static void Initialize(String appName, int width, int height) {
-        instance.initialize(appName, width, height);
+    public static void SetDisplayCallBack(Runnable r) {
+        instance.displayCallBack = r;
     }
 
-    public static void Render() {
-        instance.render();
+    public static void SetInitCallBack(Runnable r) {
+        instance.initCallBack = r;
     }
 
-    public static GLProfile GetProfile() {
-        return instance.profile;
-    }
+    @Override
+    public void init(GLAutoDrawable drawable) {
+        updateGL(drawable);
 
+        gl.glShadeModel(GL2.GL_SMOOTH);              // Enable Smooth Shading
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);    // Black Background
+        gl.glClearDepth(1.0f);                    // Depth Buffer Setup
+        gl.glEnable(GL_DEPTH_TEST);                  // Enables Depth Testing
+        gl.glDepthFunc(GL2.GL_LEQUAL);               // The Type Of Depth Testing To Do
+        // Really Nice Perspective Calculations
+        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 
-    // Private implementations
+        // Texture
+        gl.glEnable(GL_TEXTURE_2D);
 
-    private void initialize(String appName, int width, int height) {
-        isInit = true;
-        frame = new Frame(appName);
-        frame.setSize(width, height);
-        frame.setLayout(new BorderLayout());
-        frame.add(canvas, java.awt.BorderLayout.CENTER);
-        frame.validate();
-        frame.setVisible(true);
-        canvas.addGLEventListener(GraphicsEventListener.getInstance());
-        canvas.requestFocus();
-    }
+        gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 
-    private void render() {
-        if (!isInit) {
-            System.out.println("\n\nERROR :: Tried to render without initializing renderer.\n\n");
-            return;
+        gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+        gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+
+//        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, new float[]{1f, 0f, 0f, 1.0f}, 0);
+//        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, new float[]{1f, 0f, 0f, 1.0f}, 0);
+//        gl.glEnable(GL2.GL_LIGHT0);
+
+        // keyboard
+        if (drawable instanceof com.jogamp.newt.Window) {
+            com.jogamp.newt.Window window = (Window) drawable;
+            window.addKeyListener(InputManager.getInstance());
+            window.addMouseListener(InputManager.getInstance());
+        } else if (GLProfile.isAWTAvailable() && drawable instanceof java.awt.Component) {
+            java.awt.Component comp = (java.awt.Component) drawable;
+            new AWTKeyAdapter(InputManager.getInstance(), drawable).addTo(comp);
+            new AWTMouseAdapter(InputManager.getInstance(), drawable).addTo(comp);
         }
-        canvas.display();
+
+        if (initCallBack != null) {
+            initCallBack.run();
+        }
     }
 
-    public static int GetWindowWidth(){
-        return instance.canvas.getWidth();
+    @Override
+    public void display(GLAutoDrawable drawable) {
+        updateGL(drawable);
+
+        // clear drawing area
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
+
+
+        if (displayCallBack != null) {
+            displayCallBack.run();
+        }
+
+        //gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, new float[]{0, 0, 0}, 0);
+        //gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, new float[]{0.8f, 0.8f, 0.8f, 1.0f}, 0);
+
+        if (debuggerEnabled) {
+            Debugger.Render(gl);
+        }
     }
 
-    public static int GetWindowHeight(){
-        return instance.canvas.getHeight();
+    @Override
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        updateGL(drawable);
+
+        if (height <= 0) {
+            height = 1;
+        }
+        float h = (float) width / (float) height;
+        gl.glMatrixMode(GL_PROJECTION);
+        gl.glLoadIdentity();
+        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
+        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glLoadIdentity();
+    }
+
+    @Override
+    public void dispose(GLAutoDrawable drawable) {
+        updateGL(drawable);
+    }
+
+    private void updateGL(GLAutoDrawable drawable) {
+        gl = drawable.getGL().getGL2();
+        Graphics.UpdateGL(gl);
+    }
+
+    public static GLU GetGLU() {return instance.glu;}
+
+    public static void EnableDebugger() {
+        instance.debuggerEnabled = true;
+    }
+
+    public static void DisableDebugger() {
+        instance.debuggerEnabled = false;
+    }
+
+    void Enable3D() {
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+        gl.glDepthMask(true);
+        gl.glEnable(GL_DEPTH_TEST);              // Enables Depth Testing
+        gl.glEnable(GL_TEXTURE_2D);
+        gl.glEnable(GL_LIGHTING);
+        gl.glEnable(GL_CULL_FACE);
+
+        gl.glMatrixMode(GL_PROJECTION);
+        gl.glPopMatrix();
+        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glLoadIdentity();
+
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+    }
+
+    void Enable2D() {
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+        gl.glDepthMask(false);
+        gl.glDisable(GL_DEPTH_TEST);
+        gl.glDisable(GL_TEXTURE_2D);
+        gl.glDisable(GL_LIGHTING);
+        gl.glDisable(GL_CULL_FACE);
+
+        gl.glMatrixMode(GL_PROJECTION);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        glu.gluOrtho2D(0, 768, 1366, 0);
+        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glLoadIdentity();
+
+        gl.glClear(GL_DEPTH_BUFFER_BIT);
     }
 }
