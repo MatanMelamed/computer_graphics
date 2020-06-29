@@ -46,6 +46,6 @@ public class GameManager {
 
     private static void drawFrameEvent() {
         instance.worldManager.SetLookAt();
-        instance.worldManager.DrawCurentWorld();
+        instance.worldManager.DrawCurrentWorld();
     }
 }

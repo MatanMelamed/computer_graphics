@@ -21,6 +21,7 @@ public class ImageResource {
         try {
             image = ImageIO.read(url);
         } catch (IOException e) {
+            System.out.println(String.format("Cannot find image in %s","/images/" + path));
             e.printStackTrace();
         }
 

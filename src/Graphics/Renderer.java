@@ -59,9 +59,6 @@ public class Renderer implements GLEventListener {
         gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
         gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 
-        gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
-
 //        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, new float[]{1f, 0f, 0f, 1.0f}, 0);
 //        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, new float[]{1f, 0f, 0f, 1.0f}, 0);
 //        gl.glEnable(GL2.GL_LIGHT0);
@@ -88,8 +85,8 @@ public class Renderer implements GLEventListener {
 
         // clear drawing area
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
 
+        gl.glLoadIdentity();
 
         if (displayCallBack != null) {
             displayCallBack.run();

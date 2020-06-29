@@ -36,6 +36,7 @@ public class Debugger {
             textRenderer.draw(instance.messages.get(i).get(), 25, 25 + 25 * i);
         }
         textRenderer.endRendering();
+        textRenderer.setColor(Color.WHITE);
 
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glEnable(GL.GL_BLEND);

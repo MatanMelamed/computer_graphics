@@ -20,6 +20,9 @@ class WorldManager {
 
     public void SetPlayer(PlayerObject player) {
         Player = player;
+        Vector3D currentPos = player.GetPosition();
+        player.Move(-currentPos.x + 2, -currentPos.y, -currentPos.z + 2);
+
     }
 
     public void SetWorld(World newWorld) {
@@ -38,22 +41,18 @@ class WorldManager {
 
     public void SetLookAt() {
 
-//        Vector3D direction = !PlayerView ? cs.Position.minus(cs.DirZ) : new Vector3D(InputManager.x, InputManager.y, InputManager.z);
         Vector3D position = Player.GetPosition();
         Vector3D direction = Player.GetDirection();
-//        glu.gluLookAt(0, 0, 0, 0,0,-1, 0, 1, 0);
-//        glu.gluLookAt(cs.Position.x, cs.Position.y, cs.Position.z, 0, 0, -1, cs.DirY.x, cs.DirY.y, cs.DirY.z);
-        Renderer.GetGLU().gluLookAt(position.x, position.y, position.z, direction.x, direction.y, direction.z, 0, 1, 0);
+        Renderer.GetGLU().gluLookAt(position.x, position.y + PlayerObject.Height,
+                position.z, direction.x, direction.y, direction.z,
+                0, 1, 0);
     }
 
 
-    public void DrawCurentWorld() {
-
+    public void DrawCurrentWorld() {
         if (currentWorld != null) {
             currentWorld.Render();
         }
-
-        // last object doesn't matter because at the beginning of a new frame, the vm matrix is zeroed out to id.
         Player.draw();
     }
 }

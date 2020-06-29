@@ -4,7 +4,10 @@ import Models.ImageResource;
 import Models.Vector3D;
 import com.jogamp.opengl.util.texture.Texture;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+
+import static javax.media.opengl.GL.GL_TEXTURE_2D;
 
 public class Graphics {
 
@@ -36,6 +39,10 @@ public class Graphics {
     }
 
     public static void BindTexture(ImageResource imageResource) {
+
+        instance.gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+        instance.gl.glTexParameteri(GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+
         Texture tex = imageResource.getTexture();
 
         if (tex != null) {
@@ -47,7 +54,7 @@ public class Graphics {
         instance.gl.glCallList(list);
     }
 
-    public static int Create2DTexturedPlane(float width, float height) {
+    public static int Create2DTexturedPlane(float width, float height,float textureWRatio,float textureHRatio) {
         GL2 gl = instance.gl;
         int list = gl.glGenLists(1);
         gl.glNewList(list, GL2.GL_COMPILE);
@@ -57,13 +64,13 @@ public class Graphics {
         height /= 2;
 
         gl.glNormal3f(0, 1, 0);
-        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glTexCoord2f(0.0f, textureHRatio);
         gl.glVertex3f(-width, 0, -height);
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-width, 0, height);
-        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glTexCoord2f(textureWRatio, 0.0f);
         gl.glVertex3f(width, 0, height);
-        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glTexCoord2f(textureWRatio, textureHRatio);
         gl.glVertex3f(width, 0, -height);
 
         gl.glEnd();

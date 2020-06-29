@@ -1,63 +1,47 @@
 package World;
 
-import Core.InputManager;
-import GameObjects.BoxObject;
-import GameObjects.GameObject;
 import GameObjects.PlateObject;
-import Graphics.Debugger;
 import Models.Axis;
-import com.jogamp.newt.event.KeyEvent;
 
 
 public class World1 extends BaseWorld {
 
-    public static GameObject pl = new BoxObject("wood_box.jpg", 1, 1,1);
-
-    public static void move(int forward, int side, int height) {
-        pl.Move(side, height, forward);
-    }
-
-    public static void rot(Axis axis, double angle) {
-        pl.Rotate(axis, angle);
-    }
-
-    public static String print() {
-        return String.format("Plate :: %s ", pl);
-    }
-
     public World1() {
-        BoxObject box;
+        CreateRoom(20,30,3);
+    }
 
-        PlateObject plate = new PlateObject("wood_box.jpg", 16, 16);
-        plate.Move(0, -5, 0);
+    private void CreateRoom(int width, int depth, int height) {
+        // floor
+        PlateObject plate = new PlateObject("square_floor.png", 10, 5, width, depth);
+        plate.Move(plate.getWidth() / 2, 0, plate.getHeight() / 2);
         AddGameObject(plate);
 
-        AddGameObject(pl);
-//        plate = new PlateObject("wood_box.jpg", 16, 16);
-//        plate.SetPosition(8, 6, 0);
-//        plate.Rotate(Axis.Z, 90);
-//        AddGameObject(plate);
+        // left wall
+        plate = new PlateObject("wall.jpg", depth / 4, 1, depth, height);
+        plate.Move(width, height/2f, depth/2f);
+        plate.Rotate(Axis.X, -90);
+        plate.Rotate(Axis.Z, 90);
+        AddGameObject(plate);
 
-        InputManager.RegisterBinding(KeyEvent.VK_UP, () -> move(1, 0, 0));
-        InputManager.RegisterBinding(KeyEvent.VK_DOWN, () -> move(-1, 0, 0));
-        InputManager.RegisterBinding(KeyEvent.VK_LEFT, () -> move(0, 1, 0));
-        InputManager.RegisterBinding(KeyEvent.VK_RIGHT, () -> move(0, -1, 0));
-        InputManager.RegisterBinding(KeyEvent.VK_SPACE, () -> move(0, 0, 1));
-        InputManager.RegisterBinding(KeyEvent.VK_SHIFT, () -> move(0, 0, -1));
+        // right wall
+        plate = new PlateObject("wall.jpg", depth / 4, 1, depth, height);
+        plate.Move(0, height/2f, depth/2f);
+        plate.Rotate(Axis.X, -90);
+        plate.Rotate(Axis.Z, -90);
+        AddGameObject(plate);
 
-        InputManager.RegisterBinding(KeyEvent.VK_Q, () -> rot(Axis.X, 10));
-        InputManager.RegisterBinding(KeyEvent.VK_W, () -> rot(Axis.X, -10));
-        InputManager.RegisterBinding(KeyEvent.VK_A, () -> rot(Axis.Y, 10));
-        InputManager.RegisterBinding(KeyEvent.VK_S, () -> rot(Axis.Y, -10));
-        InputManager.RegisterBinding(KeyEvent.VK_Z, () -> rot(Axis.Z, 10));
-        InputManager.RegisterBinding(KeyEvent.VK_X, () -> rot(Axis.Z, -10));
+        // front wall
+        plate = new PlateObject("wall.jpg", depth / 4, 1, width, height);
+        plate.Move(width/2f, height/2f, depth);
+        plate.Rotate(Axis.X, 90);
+        plate.Rotate(Axis.Y, 180);
+        AddGameObject(plate);
 
-
-        Debugger.AddDebug(World1::print);
-
-
-        box = new BoxObject("wood_box.jpg", 1, 1, 1);
-        box.Move(8, 6, 0);
-        AddGameObject(box);
+        // back wall
+        plate = new PlateObject("wall.jpg", depth / 4, 1, width, height);
+        plate.Move(width/2f, height/2f, 0);
+        plate.Rotate(Axis.X, -90);
+        AddGameObject(plate);
     }
+
 }

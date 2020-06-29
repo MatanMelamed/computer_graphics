@@ -1,10 +1,12 @@
 package GameObjects;
 
 import Models.Axis;
+import Models.CoordinateSystem;
 import Models.Vector3D;
 
 public class PlayerObject extends GameObject {
 
+    public static int Height = 1;
 
     public PlayerObject() { }
 
@@ -35,8 +37,8 @@ public class PlayerObject extends GameObject {
         }
     }
 
-    public Vector3D GetDirection(){
-        return cs.Position.plus(cs.DirZ);
+    public Vector3D GetDirection() {
+        return cs.Position.plus(cs.DirZ).plus(new Vector3D(0, Height, 0));
     }
 
     @Override
