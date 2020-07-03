@@ -24,7 +24,7 @@ public abstract class GameObject implements Drawable {
         return cs.GetZDiv();
     }
 
-    public Vector3D GetPosition(){
+    public Vector3D GetPosition() {
         return cs.Position;
     }
 
@@ -43,7 +43,7 @@ public abstract class GameObject implements Drawable {
     public void InitGameObject() {}
 
     @Override
-    public final void draw() {
+    public void draw() {
         double[] angles = cs.AxisAnglesFromWorld();
 
         Graphics.PushMatrix();
@@ -55,7 +55,7 @@ public abstract class GameObject implements Drawable {
         Graphics.PopMatrix();
     }
 
-    protected abstract void drawInPlace();
+    protected void drawInPlace() {}
 
     @Override
     public String toString() {
