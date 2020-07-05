@@ -1,8 +1,7 @@
 package Core;
 
-import GameObjects.PlayerObject;
-import Graphics.Renderer;
-import Models.CoordinateSystem;
+import GameObjects.Prefabs.PlayerObject;
+import Core.Graphics.Renderer;
 import Models.Vector3D;
 import World.World;
 
@@ -20,8 +19,7 @@ class WorldManager {
 
     public void SetPlayer(PlayerObject player) {
         Player = player;
-        Vector3D currentPos = player.GetPosition();
-        player.Move(-currentPos.x + 2, -currentPos.y, -currentPos.z + 2);
+        Player.Move(2, 0, 2);
 
     }
 
@@ -33,9 +31,9 @@ class WorldManager {
         return currentWorld;
     }
 
-    public void UpdateCurrentWorld(float dt) {
+    public void UpdateCurrentWorld(float deltaTime) {
         if (currentWorld != null) {
-            currentWorld.Update();
+            currentWorld.Update(deltaTime);
         }
     }
 
@@ -53,6 +51,6 @@ class WorldManager {
         if (currentWorld != null) {
             currentWorld.Render();
         }
-        Player.draw();
+        Player.RenderAll();
     }
 }

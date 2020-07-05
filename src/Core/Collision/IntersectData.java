@@ -1,4 +1,4 @@
-package Collision;
+package Core.Collision;
 
 public class IntersectData {
 
@@ -10,7 +10,7 @@ public class IntersectData {
         this.distance = distance;
     }
 
-    public boolean isDoesIntersect() {
+    public boolean IsIntersect() {
         return doesIntersect;
     }
 

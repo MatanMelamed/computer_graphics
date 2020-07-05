@@ -1,4 +1,4 @@
-package Graphics;
+package Core.Graphics;
 
 import Models.ImageResource;
 import Models.Vector3D;
@@ -54,7 +54,61 @@ public class Graphics {
         instance.gl.glCallList(list);
     }
 
-    public static int Create2DTexturedPlane(float width, float height,float textureWRatio,float textureHRatio) {
+    public static float SIN(float x) {
+        return (float) java.lang.Math.sin((float) x * 3.14159 / 180);
+    }
+
+    public static float COS(float x) {
+        return (float) java.lang.Math.cos((float) x * 3.14159 / 180);
+    }
+
+    public static int make_ball() {
+        GL2 gl = instance.gl;
+        int list;
+        float a, b;
+        float da = 18.0f, db = 18.0f;
+        float radius = 1.0f;
+        int color;
+        float x, y, z;
+
+        list = gl.glGenLists(1);
+
+        gl.glNewList(list, GL2.GL_COMPILE);
+
+        color = 0;
+        for (a = -90.0f; a + da <= 90.0; a += da) {
+
+            gl.glBegin(GL2.GL_QUAD_STRIP);
+            for (b = 0.0f; b <= 360.0; b += db) {
+
+                if (color > 0) {
+                    gl.glColor3f(1.0f, 0.0f, 0.0f);
+                } else {
+                    gl.glColor3f(1.0f, 1.0f, 1.0f);
+                }
+
+                x = radius * COS(b) * SIN(a);
+                y = radius * SIN(b) * COS(a);
+                z = radius * SIN(a);
+                gl.glVertex3f(x, y, z);
+
+                x = radius * COS(b) * COS(a + da);
+                y = radius * SIN(b) * COS(a + da);
+                z = radius * SIN(a + da);
+                gl.glVertex3f(x, y, z);
+
+                color = 1 - color;
+            }
+            gl.glEnd();
+
+        }
+
+        gl.glEndList();
+
+        return list;
+    }
+
+    public static int Create2DTexturedPlane(float width, float height, float textureWRatio, float textureHRatio) {
         GL2 gl = instance.gl;
         int list = gl.glGenLists(1);
         gl.glNewList(list, GL2.GL_COMPILE);

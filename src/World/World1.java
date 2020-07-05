@@ -1,8 +1,8 @@
 package World;
 
-import GameObjects.BoxObject;
-import GameObjects.ControllableObject;
-import GameObjects.PlateObject;
+import GameObjects.Prefabs.ControllableObject;
+import GameObjects.Prefabs.BoxObject;
+import GameObjects.Prefabs.PlateObject;
 import Models.Axis;
 
 
@@ -10,11 +10,19 @@ public class World1 extends BaseWorld {
 
     public World1() {
         CreateRoom(20,30,3);
+
+        BoxObject box = new BoxObject(1,1,1);
+        box.Move(5,0.5f,5);
+        AddGameObject(new ControllableObject(box));
+
+        box = new BoxObject(1,1,1);
+        box.Move(7,0.5f,5);
+        AddGameObject(box);
     }
 
     private void CreateRoom(int width, int depth, int height) {
         // floor
-        PlateObject plate = new PlateObject("square_floor.png", 10, 5, width, depth);
+        PlateObject plate = new PlateObject("square_floor.png", width, depth, width, depth);
         plate.Move(plate.getWidth() / 2, 0, plate.getHeight() / 2);
         AddGameObject(plate);
 
@@ -44,14 +52,6 @@ public class World1 extends BaseWorld {
         plate.Move(width/2f, height/2f, 0);
         plate.Rotate(Axis.X, -90);
         AddGameObject(plate);
-
-        BoxObject box = new BoxObject("wood_box.jpg",1,1,1);
-        box.Move(5,0.5f,5);
-        AddGameObject(new ControllableObject(box));
-
-        box = new BoxObject("wood_box.jpg",1,1,1);
-        box.Move(7,0.5f,5);
-        AddGameObject(box);
     }
 
 }

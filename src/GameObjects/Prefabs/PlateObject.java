@@ -1,8 +1,12 @@
-package GameObjects;
+package GameObjects.Prefabs;
 
-import Graphics.Graphics;
+import Core.Graphics.Graphics;
+import GameObjects.Components.TexturedGLListComponent;
+import GameObjects.GameObject;
 
-public class PlateObject extends SingleTexturedGameObject {
+import java.util.function.Supplier;
+
+public class PlateObject extends GameObject {
 
     private float width;
     private float height;
@@ -11,11 +15,14 @@ public class PlateObject extends SingleTexturedGameObject {
 
 
     public PlateObject(String imageName, float textureWidthRatio, float textureHeightRatio, float width, float height) {
-        super(imageName);
         this.width = width;
         this.height = height;
         this.tWratio = textureWidthRatio;
         this.tHratio = textureHeightRatio;
+
+        Supplier<Integer> glGenerator = () -> Graphics.Create2DTexturedPlane(width,height,tWratio,tHratio);
+        TexturedGLListComponent graphics = new TexturedGLListComponent(imageName, glGenerator);
+        AddComponent(graphics);
     }
 
     public float getWidth() {
@@ -24,11 +31,5 @@ public class PlateObject extends SingleTexturedGameObject {
 
     public float getHeight() {
         return height;
-    }
-
-    @Override
-    protected void CreateAndSetObjectGLLIst() {
-
-        objectGLList = Graphics.Create2DTexturedPlane(width, height, tWratio, tHratio);
     }
 }

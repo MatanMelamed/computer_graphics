@@ -1,6 +1,5 @@
-package Graphics;
+package Core.Graphics;
 
-import Core.GameManager;
 import Core.InputManager;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.awt.AWTKeyAdapter;
@@ -50,6 +49,9 @@ public class Renderer implements GLEventListener {
         gl.glClearDepth(1.0f);                    // Depth Buffer Setup
         gl.glEnable(GL_DEPTH_TEST);                  // Enables Depth Testing
         gl.glDepthFunc(GL2.GL_LEQUAL);               // The Type Of Depth Testing To Do
+//        gl.glEnable(GL2.GL_NORMALIZE); //all the vecs wil be normalize
+//        gl.glEnable(GL2.GL_CULL_FACE); //enable cull face
+
         // Really Nice Perspective Calculations
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 

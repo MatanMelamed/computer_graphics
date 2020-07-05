@@ -1,6 +1,7 @@
+import Core.Collision.ColliderType;
 import Core.GameManager;
-import Graphics.Debugger;
-import Graphics.Renderer;
+import Core.Graphics.Debugger;
+import Core.Graphics.Renderer;
 
 
 public class Main {
@@ -11,11 +12,11 @@ public class Main {
         Renderer.EnableDebugger();
 
         Debugger.AddDebug(() -> {
-            var cs = GameManager.GetPlayer().AxisAnglesFromWorld();
-            return String.format("x: %.4f, y: %.4f, z: %.4f", cs[0], cs[1], cs[2]);
+            var p = GameManager.GetPlayer();
+            return String.format("x: %.4f, y: %.4f, z: %.4f", p.GetAxisAngleX(), p.GetAxisAngleY(), p.GetAxisAngleZ());
         });
 
-        GameManager.StartGame();
+         GameManager.StartGame();
     }
 
 

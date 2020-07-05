@@ -1,6 +1,6 @@
 package Models;
 
-import Graphics.WindowManager;
+import Core.Graphics.WindowManager;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 

@@ -1,64 +1,80 @@
 package GameObjects;
 
-import Graphics.Drawable;
-import Graphics.Graphics;
-import Models.Axis;
-import Models.CoordinateSystem;
+import Core.Graphics.Graphics;
 import Models.Vector3D;
 
-public abstract class GameObject implements Drawable {
+import java.util.ArrayList;
 
-    protected CoordinateSystem cs = new CoordinateSystem();
+public class GameObject extends TransformObject {
 
-    public GameObject() {}
+    private ArrayList<GameObject> children = new ArrayList<>();
+    private ArrayList<GameObjectComponent> components = new ArrayList<>();
 
-    public double GetAngleX() {
-        return cs.GetXDiv();
+    public void AddChild(GameObject child) {children.add(child);}
+
+    public void AddComponent(GameObjectComponent component) {
+        components.add(component);
+        component.SetParent(this);
     }
 
-    public double GetAngleY() {
-        return cs.GetYDiv();
+
+    public ArrayList<GameObject> GetChildren() {
+        return children;
     }
 
-    public double GetAngleZ() {
-        return cs.GetZDiv();
+    public ArrayList<GameObjectComponent> GetComponents() {
+        return components;
     }
 
-    public Vector3D GetPosition() {
-        return cs.Position;
+    public void InitializeAll() {
+        for (GameObject child : children) {
+            child.InitializeAll();
+        }
+        Initialize();
     }
 
-    public double[] AxisAnglesFromWorld() {
-        return new double[]{GetAngleX(), GetAngleY(), GetAngleZ()};
+    public void UpdateAll(float deltaTime) {
+        for (GameObject child : children) {
+            child.UpdateAll(deltaTime);
+        }
+        Update(deltaTime);
     }
 
-    public void Move(double x, double y, double z) {
-        cs.move(new Vector3D(x, y, z));
+    public void RenderAll() {
+        for (GameObject child : children) {
+            child.RenderAll();
+        }
+        Render();
     }
 
-    public void Rotate(Axis axis, double angle) {
-        cs.rotate(axis, angle);
+
+    private void Initialize() {
+        for (GameObjectComponent component : components) {
+            component.Initialize();
+        }
     }
 
-    public void InitGameObject() {}
+    private void Update(float deltaTime) {
+        for (GameObjectComponent component : components) {
+            component.Update(deltaTime);
+        }
+    }
 
-    @Override
-    public void draw() {
-        double[] angles = cs.AxisAnglesFromWorld();
+    private void Render() {
+        Vector3D position = GetPosition();
 
         Graphics.PushMatrix();
-        Graphics.Translate((float) cs.Position.x, (float) cs.Position.y, (float) cs.Position.z);
-        Graphics.Rotate((float) angles[0], 1, 0, 0);
-        Graphics.Rotate((float) angles[1], 0, 1, 0);
-        Graphics.Rotate((float) angles[2], 0, 0, 1);
-        drawInPlace();
+        Graphics.Translate((float) position.x, (float) position.y, (float) position.z);
+        Graphics.Rotate((float) GetAxisAngleX(), 1, 0, 0);
+        Graphics.Rotate((float) GetAxisAngleY(), 0, 1, 0);
+        Graphics.Rotate((float) GetAxisAngleZ(), 0, 0, 1);
+
+        for (GameObjectComponent component : components) {
+            component.Render();
+        }
+
         Graphics.PopMatrix();
     }
 
-    protected void drawInPlace() {}
 
-    @Override
-    public String toString() {
-        return String.format("GameObject :: %s", cs);
-    }
 }

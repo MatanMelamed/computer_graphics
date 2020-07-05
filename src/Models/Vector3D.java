@@ -19,6 +19,8 @@ public class Vector3D {
         this(other.x, other.y, other.z);
     }
 
+    public Vector3D duplicate() { return new Vector3D(x, y, z); }
+
     public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;

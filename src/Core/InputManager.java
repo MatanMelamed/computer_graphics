@@ -1,6 +1,6 @@
 package Core;
 
-import Graphics.WindowManager;
+import Core.Graphics.WindowManager;
 
 import Models.Axis;
 import com.jogamp.newt.event.KeyEvent;

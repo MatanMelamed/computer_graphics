@@ -1,4 +1,4 @@
-package Graphics;
+package Core.Graphics;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -7,9 +7,6 @@ import javax.media.opengl.GL2;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.function.Supplier;
-
-import static javax.media.opengl.GL.GL_DEPTH_TEST;
-import static javax.media.opengl.GL.GL_TEXTURE_2D;
 
 public class Debugger {
     ArrayList<Supplier<String>> messages = new ArrayList<>();

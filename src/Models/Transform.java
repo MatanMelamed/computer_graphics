@@ -1,18 +1,17 @@
 package Models;
 
-public class CoordinateSystem {
+public class Transform {
 
     public static Vector3D WORLD_X = new Vector3D(1, 0, 0);
     public static Vector3D WORLD_Y = new Vector3D(0, 1, 0);
     public static Vector3D WORLD_Z = new Vector3D(0, 0, 1);
 
-
     public Vector3D Position;
     public Vector3D DirX, DirY, DirZ;
 
-    private double xDiv, yDiv, zDiv;
+    public double xDiv, yDiv, zDiv;
 
-    public CoordinateSystem() {
+    public Transform() {
         Position = new Vector3D(0, 0, 0);
         DirX = new Vector3D(1, 0, 0);
         DirY = new Vector3D(0, 1, 0);
@@ -26,11 +25,11 @@ public class CoordinateSystem {
         this.Position.z = z;
     }
 
-    public void move(Vector3D deltaMove) {
-        Position = Position.plus(deltaMove);
+    public void Move(Vector3D delta) {
+        Position = Position.plus(delta);
     }
 
-    public void rotate(Axis axis, double angle) {
+    public void Rotate(Axis axis, double angle) {
         Vector3D a, b, newA, newB;
         if (axis == Axis.X) {
             a = DirY;
@@ -55,39 +54,8 @@ public class CoordinateSystem {
         b.Set(newB.normalize());
     }
 
-
     @Override
     public String toString() {
         return String.format("Pos: %s, Dir: (x: %s, y: %s, z: %s), Angles: (x: %.4f, y: %.4f, z: %.4f)", Position, DirX, DirY, DirZ, xDiv, yDiv, zDiv);
-    }
-
-    public double GetXDiv() {
-        return xDiv;
-    }
-
-    public double GetYDiv() {
-        return yDiv;
-    }
-
-    public double GetZDiv() {
-        return zDiv;
-    }
-
-    public double[] AxisAnglesFromWorld() {
-        return new double[]{GetXDiv(), GetYDiv(), GetZDiv()};
-    }
-
-    public void check() {
-        double angleY;
-
-        Vector3D vz = DirZ.minus(new Vector3D(0, DirZ.y, 0));
-        angleY = vz.angleBetween(WORLD_Z);
-        System.out.println(Math.toDegrees(angleY));
-
-        vz = DirY.minus(new Vector3D(DirY.x, 0, 0));
-        System.out.println(Math.toDegrees(vz.angleBetween(WORLD_Y)));
-        System.out.println(this);
-
-
     }
 }

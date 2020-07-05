@@ -1,12 +1,12 @@
 package Core;
 
-import GameObjects.PlayerObject;
-import Graphics.Renderer;
-import Graphics.WindowManager;
+import GameObjects.Prefabs.PlayerObject;
+import Core.Graphics.Renderer;
+import Core.Graphics.WindowManager;
 import World.World1;
 
 /*
-    Initialize, Start, and handle main game calls of update and draw
+    initializeGraphics, Start, and handle main game calls of update and draw
  */
 public class GameManager {
 
@@ -26,22 +26,22 @@ public class GameManager {
     public static void StartGame() {
         WindowManager.Initialize("MyGame", 1366, 768);
         InputManager.Initialize();
-        Renderer.SetInitCallBack(GameManager::initGameGraphics);
+        Renderer.SetInitCallBack(GameManager::initializeGraphics);
         Renderer.SetDisplayCallBack(GameManager::drawFrameEvent);
         GameLoop.GetInstance().Start();
     }
 
-    public static void UpdateLogic(float dt) {
-        instance.worldManager.UpdateCurrentWorld(dt);
+    public static void Update(float deltaTime) {
+        instance.worldManager.UpdateCurrentWorld(deltaTime);
     }
 
-    public static void UpdateGraphics() {
+    public static void Render() {
         // invokes Renderer's display method using GL, will call
         WindowManager.DrawNextFrame();
     }
 
-    private static void initGameGraphics(){
-        instance.worldManager.GetCurrentWorld().PrepareToRender();
+    private static void initializeGraphics() {
+        instance.worldManager.GetCurrentWorld().Initialize();
     }
 
     private static void drawFrameEvent() {

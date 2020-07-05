@@ -67,7 +67,7 @@ public class GameLoop {
          */
         while (startUpdateTime - lastUpdateTime >= timeBetweenUpdatesInNanoSec) {
 
-            GameManager.UpdateLogic(timeBetweenUpdatesInSec);
+            GameManager.Update(timeBetweenUpdatesInSec);
 
             lastUpdateTime += timeBetweenUpdatesInNanoSec;
             updates++;
@@ -79,6 +79,6 @@ public class GameLoop {
     }
 
     private void updateGraphics() {
-        GameManager.UpdateGraphics();
+        GameManager.Render();
     }
 }

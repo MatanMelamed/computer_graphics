@@ -1,13 +1,14 @@
-package Collision;
+package Core.Collision;
 
 import Models.Vector3D;
 
-public class BoundingSphere {
+public class BoundingSphere extends Collider {
 
     Vector3D center;
     float radius;
 
     public BoundingSphere(Vector3D center, float radius) {
+        super(ColliderType.BS);
         this.center = center;
         this.radius = radius;
     }
@@ -20,7 +21,7 @@ public class BoundingSphere {
         return radius;
     }
 
-    IntersectData IntersectBoundingSphere(BoundingSphere other) {
+    public IntersectData IntersectBoundingSphere(BoundingSphere other) {
         float radiusDistance = radius + other.radius;
         double centerDistance = other.getCenter().minus(center).magnitude();
 
@@ -29,5 +30,15 @@ public class BoundingSphere {
         } else {
             return new IntersectData(false, (float) centerDistance - radiusDistance);
         }
+    }
+
+    @Override
+    public void Translate(Vector3D translation) {
+        center = center.plus(translation);
+    }
+
+    @Override
+    public void SetPosition(Vector3D newPosition) {
+        center = newPosition;
     }
 }

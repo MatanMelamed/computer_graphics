@@ -1,6 +1,7 @@
-package GameObjects;
+package GameObjects.Prefabs;
 
 import Core.InputManager;
+import GameObjects.GameObject;
 import Models.Axis;
 import com.jogamp.newt.event.KeyEvent;
 
@@ -11,10 +12,11 @@ public class ControllableObject extends GameObject {
 
     public ControllableObject(GameObject controlledObject) {
         this.controlledObject = controlledObject;
+        AddChild(controlledObject);
         initControl();
     }
 
-    void initControl() {
+    private void initControl() {
         InputManager.RegisterBinding(KeyEvent.VK_LEFT, () -> controlledObject.Move(speed, 0, 0));
         InputManager.RegisterBinding(KeyEvent.VK_RIGHT, () -> controlledObject.Move(-speed, 0, 0));
         InputManager.RegisterBinding(KeyEvent.VK_UP, () -> controlledObject.Move(0, speed, 0));
@@ -33,14 +35,12 @@ public class ControllableObject extends GameObject {
     }
 
     @Override
-    public void InitGameObject() {
-        controlledObject.InitGameObject();
+    public void InitializeAll() {
+        controlledObject.InitializeAll();
     }
 
     @Override
-    public void draw() {
-        controlledObject.draw();
+    public void RenderAll() {
+        controlledObject.RenderAll();
     }
-
-
 }

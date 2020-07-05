@@ -1,37 +1,68 @@
 package World;
 
+import Core.Collision.CollisionChecker;
+import Core.Collision.IntersectData;
+import GameObjects.Components.ColliderComponent;
 import GameObjects.GameObject;
+import GameObjects.GameObjectComponent;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.ArrayList;
 
 public abstract class BaseWorld implements World {
-    protected BlockingQueue<GameObject> gameObjects;
+    protected GameObject root = new GameObject();
+    protected ArrayList<ColliderComponent> colliderComponents = new ArrayList<>();
 
-    public BaseWorld() {
-        gameObjects = new LinkedBlockingDeque<>();
-    }
-
-    public void AddGameObject(GameObject gameObject) {
-        gameObjects.add(gameObject);
+    @Override
+    public void Initialize() {
+        root.InitializeAll();
+        collectObjectsWithCollider(root);
+        System.out.println(colliderComponents.size()+" colliders");
     }
 
     @Override
-    public void PrepareToRender() {
-        for (GameObject object : gameObjects) {
-            object.InitGameObject();
+    public void Update(float deltaTime) {
+        root.UpdateAll(deltaTime);
+        HandleColliders();
+    }
+
+    @Override
+    public void Render() { root.RenderAll(); }
+
+    public void AddGameObject(GameObject gameObject) { root.AddChild(gameObject); }
+
+    private void HandleColliders() {
+        ColliderComponent first, second;
+        IntersectData data;
+
+        for (int i = 0; i < colliderComponents.size(); i++) {
+            for (int j = i + 1; j < colliderComponents.size(); j++) {
+                first = colliderComponents.get(i);
+                second = colliderComponents.get(j);
+                data = CollisionChecker.CheckCollision(first.GetCollider(), second.GetCollider());
+                if (data.IsIntersect()) {
+                    first.CollisionHandle(data, second);
+                    second.CollisionHandle(data, first);
+                }
+            }
         }
     }
 
-    @Override
-    public void Update() {
-
+    private ColliderComponent getColliderComponent(GameObject object) {
+        for (GameObjectComponent component : object.GetComponents()) {
+            if (component instanceof ColliderComponent) {
+                return (ColliderComponent) component;
+            }
+        }
+        return null;
     }
 
-    @Override
-    public void Render() {
-        for (GameObject object : gameObjects) {
-            object.draw();
+    private void collectObjectsWithCollider(GameObject current) {
+        for (GameObject object : current.GetChildren()) {
+            collectObjectsWithCollider(object);
+        }
+        ColliderComponent component = null;
+        if ((component = getColliderComponent(current)) != null) {
+            colliderComponents.add(component);
         }
     }
 }

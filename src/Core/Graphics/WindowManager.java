@@ -1,4 +1,4 @@
-package Graphics;
+package Core.Graphics;
 
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
