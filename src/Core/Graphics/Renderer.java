@@ -24,6 +24,8 @@ public class Renderer implements GLEventListener {
 
     private boolean debuggerEnabled;
 
+    private float posx = 0;
+
     //region Singleton
     private static Renderer instance = new Renderer();
 
@@ -49,7 +51,6 @@ public class Renderer implements GLEventListener {
         gl.glClearDepth(1.0f);                    // Depth Buffer Setup
         gl.glEnable(GL_DEPTH_TEST);                  // Enables Depth Testing
         gl.glDepthFunc(GL2.GL_LEQUAL);               // The Type Of Depth Testing To Do
-//        gl.glEnable(GL2.GL_NORMALIZE); //all the vecs wil be normalize
 //        gl.glEnable(GL2.GL_CULL_FACE); //enable cull face
 
         // Really Nice Perspective Calculations
@@ -58,12 +59,13 @@ public class Renderer implements GLEventListener {
         // Texture
         gl.glEnable(GL_TEXTURE_2D);
 
-        gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 
-//        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, new float[]{1f, 0f, 0f, 1.0f}, 0);
-//        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, new float[]{1f, 0f, 0f, 1.0f}, 0);
+        //initLight();
 //        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_LIGHTING);
+//        gl.glEnable(GL2.GL_NORMALIZE);
 
         // keyboard
         if (drawable instanceof com.jogamp.newt.Window) {
@@ -79,7 +81,12 @@ public class Renderer implements GLEventListener {
         if (initCallBack != null) {
             initCallBack.run();
         }
+
+        if (debuggerEnabled) {
+            Debugger.Initialize();
+        }
     }
+
 
     @Override
     public void display(GLAutoDrawable drawable) {
@@ -87,15 +94,15 @@ public class Renderer implements GLEventListener {
 
         // clear drawing area
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-
         gl.glLoadIdentity();
 
         if (displayCallBack != null) {
+//            float material[] = {0.3f, 0.3f, 0.3f, 1.0f};
+//            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, material, 0);
+
             displayCallBack.run();
         }
 
-        //gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, new float[]{0, 0, 0}, 0);
-        //gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, new float[]{0.8f, 0.8f, 0.8f, 1.0f}, 0);
 
         if (debuggerEnabled) {
             Debugger.Render(gl);
@@ -112,7 +119,7 @@ public class Renderer implements GLEventListener {
         float h = (float) width / (float) height;
         gl.glMatrixMode(GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
+        glu.gluPerspective(70.0f, h, 0.005f, 100.0);
         gl.glMatrixMode(GL_MODELVIEW);
         gl.glLoadIdentity();
     }

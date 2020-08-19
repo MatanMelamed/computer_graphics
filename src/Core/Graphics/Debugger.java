@@ -12,11 +12,16 @@ public class Debugger {
     ArrayList<Supplier<String>> messages = new ArrayList<>();
 
     private static Debugger instance = new Debugger();
+    private static TextRenderer textRenderer;
 
     private Debugger(){}
 
     public static void AddDebug(Supplier<String> s){
         instance.messages.add(s);
+    }
+
+    public static void Initialize(){
+        textRenderer = new TextRenderer(new Font("Verdana", Font.BOLD, 12));
     }
 
     public static void Render(GL2 gl) {
@@ -25,7 +30,6 @@ public class Debugger {
         gl.glDisable(GL.GL_BLEND);
         gl.glDisable(GL.GL_TEXTURE_2D);
 
-        TextRenderer textRenderer = new TextRenderer(new Font("Verdana", Font.BOLD, 12));
         textRenderer.beginRendering(1366, 768);
         textRenderer.setColor(Color.green);
         textRenderer.setSmoothing(true);

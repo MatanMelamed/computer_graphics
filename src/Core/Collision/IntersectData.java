@@ -1,20 +1,22 @@
 package Core.Collision;
 
+import Models.Vector3D;
+
 public class IntersectData {
 
     boolean doesIntersect;
-    float distance;
+    Vector3D closestPointOnOtherCollider;
 
-    public IntersectData(boolean doesIntersect, float distance) {
+    public IntersectData(boolean doesIntersect, Vector3D collisionPoint) {
         this.doesIntersect = doesIntersect;
-        this.distance = distance;
+        this.closestPointOnOtherCollider = collisionPoint;
     }
 
     public boolean IsIntersect() {
         return doesIntersect;
     }
 
-    public float getDistance() {
-        return distance;
+    public Vector3D GetClosestPointOnOtherCollider() {
+        return closestPointOnOtherCollider;
     }
 }

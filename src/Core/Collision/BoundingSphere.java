@@ -21,17 +21,6 @@ public class BoundingSphere extends Collider {
         return radius;
     }
 
-    public IntersectData IntersectBoundingSphere(BoundingSphere other) {
-        float radiusDistance = radius + other.radius;
-        double centerDistance = other.getCenter().minus(center).magnitude();
-
-        if (centerDistance < radiusDistance) {
-            return new IntersectData(true, (float) centerDistance - radiusDistance);
-        } else {
-            return new IntersectData(false, (float) centerDistance - radiusDistance);
-        }
-    }
-
     @Override
     public void Translate(Vector3D translation) {
         center = center.plus(translation);

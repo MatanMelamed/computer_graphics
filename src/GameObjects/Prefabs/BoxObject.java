@@ -1,27 +1,27 @@
 package GameObjects.Prefabs;
 
-import Core.Collision.BoundingSphere;
-import GameObjects.Components.ColliderComponent;
+import GameObjects.Components.MaterialComponent;
 import GameObjects.GameObject;
 import GameObjects.Components.TexturedGLListComponent;
 import Core.Graphics.Graphics;
 
 import java.util.function.Supplier;
 
+import static Utils.Utils.floats;
+
 public class BoxObject extends GameObject {
     private float width, height, depth;
 
-    public BoxObject(float width, float height, float depth) {
+    public BoxObject(String name, float width, float height, float depth, String image) {
+        super(name);
         this.width = width;
         this.height = height;
         this.depth = depth;
 
-        Supplier<Integer> glGenerator = () -> Graphics.Create3DTexturedRectangle(width, height, depth);
-        TexturedGLListComponent graphics = new TexturedGLListComponent("wood_box.jpg", glGenerator);
+        Supplier<Integer> glGenerator = () -> Graphics.Create3DTexturedRectangle(width, height, depth, 1, 1);
+        TexturedGLListComponent graphics = new TexturedGLListComponent(image, glGenerator);
         AddComponent(graphics);
-
-        ColliderComponent colliderComponent = new ColliderComponent(new BoundingSphere(GetPosition(), 1));
-        AddComponent(colliderComponent);
+//        AddComponent(new MaterialComponent(floats(0.9f, 0.9f, 0.9f, 1f)));
     }
 
     @Override

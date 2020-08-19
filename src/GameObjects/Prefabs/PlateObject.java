@@ -14,7 +14,8 @@ public class PlateObject extends GameObject {
     private float tWratio;
 
 
-    public PlateObject(String imageName, float textureWidthRatio, float textureHeightRatio, float width, float height) {
+    public PlateObject(String name, String imageName, float textureWidthRatio, float textureHeightRatio, float width, float height) {
+        super(name);
         this.width = width;
         this.height = height;
         this.tWratio = textureWidthRatio;
@@ -23,6 +24,7 @@ public class PlateObject extends GameObject {
         Supplier<Integer> glGenerator = () -> Graphics.Create2DTexturedPlane(width,height,tWratio,tHratio);
         TexturedGLListComponent graphics = new TexturedGLListComponent(imageName, glGenerator);
         AddComponent(graphics);
+        //graphics.Disable();
     }
 
     public float getWidth() {

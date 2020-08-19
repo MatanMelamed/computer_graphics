@@ -3,9 +3,9 @@ package Models;
 
 public class Vector3D {
 
-    public double x;
-    public double y;
-    public double z;
+    public float x;
+    public float y;
+    public float z;
 
     private static Vector3D perpendicular = new Vector3D(0, 0, 1);
 
@@ -21,7 +21,8 @@ public class Vector3D {
 
     public Vector3D duplicate() { return new Vector3D(x, y, z); }
 
-    public Vector3D(double x, double y, double z) {
+
+    public Vector3D(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -29,6 +30,10 @@ public class Vector3D {
 
     public Vector3D getPerpendicular() {
         return this.cross(perpendicular);
+    }
+
+    public boolean DifferentThan(Vector3D other) {
+        return x != other.x || y != other.y || z != other.z;
     }
 
     public void Set(Vector3D other) {
@@ -44,6 +49,20 @@ public class Vector3D {
                 z + other.z);
     }
 
+    public Vector3D plus(float x, float y, float z) {
+        return new Vector3D(
+                this.x + x,
+                this.y + y,
+                this.z + z);
+    }
+
+    public Vector3D minus(float d) {
+        return new Vector3D(
+                this.x - d,
+                this.y - d,
+                this.z = d);
+    }
+
     public Vector3D minus(Vector3D other) {
         return new Vector3D(
                 x - other.x,
@@ -52,6 +71,10 @@ public class Vector3D {
     }
 
     public Vector3D multiply(double scalar) {
+        return multiply((float) scalar);
+    }
+
+    public Vector3D multiply(float scalar) {
         return new Vector3D(
                 x * scalar,
                 y * scalar,
@@ -69,8 +92,8 @@ public class Vector3D {
         return x * other.x + y * other.y + z * other.z;
     }
 
-    public double magnitude() {
-        return Math.sqrt(dot(this));
+    public float magnitude() {
+        return (float) Math.sqrt(dot(this));
     }
 
     public double angle() {
@@ -79,7 +102,10 @@ public class Vector3D {
     }
 
     public Vector3D normalize() {
-        double magnitude = magnitude();
+        float magnitude = magnitude();
+        if (magnitude == 0) {
+            return new Vector3D(0, 0, 0);
+        }
         return new Vector3D(x / magnitude, y / magnitude, z / magnitude);
     }
 

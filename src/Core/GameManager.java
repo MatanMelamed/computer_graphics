@@ -1,29 +1,27 @@
 package Core;
 
+import Core.Graphics.NextRenderExecutioner;
 import GameObjects.Prefabs.PlayerObject;
 import Core.Graphics.Renderer;
 import Core.Graphics.WindowManager;
-import World.World1;
+import World.Workspace;
 
 /*
     initializeGraphics, Start, and handle main game calls of update and draw
  */
 public class GameManager {
 
-    private WorldManager worldManager = new WorldManager();
+    private static LevelManager levelManager = new LevelManager();
 
     private static GameManager instance = new GameManager();
 
-    private GameManager() {
-        worldManager.SetWorld(new World1());
-        worldManager.SetPlayer(new PlayerObject());
-    }
+    private GameManager() { }
 
-    public static PlayerObject GetPlayer() {
-        return instance.worldManager.getPlayer();
-    }
+    public static PlayerObject GetPlayer() { return levelManager.player; }
 
     public static void StartGame() {
+//        levelManager.SetWorld(new Level1());
+        levelManager.SetWorld(new Workspace());
         WindowManager.Initialize("MyGame", 1366, 768);
         InputManager.Initialize();
         Renderer.SetInitCallBack(GameManager::initializeGraphics);
@@ -31,21 +29,20 @@ public class GameManager {
         GameLoop.GetInstance().Start();
     }
 
-    public static void Update(float deltaTime) {
-        instance.worldManager.UpdateCurrentWorld(deltaTime);
-    }
+    // delta time in milli second
+    public static void Update(float deltaTime) { levelManager.UpdateCurrentWorld(deltaTime); }
 
     public static void Render() {
         // invokes Renderer's display method using GL, will call
         WindowManager.DrawNextFrame();
     }
 
-    private static void initializeGraphics() {
-        instance.worldManager.GetCurrentWorld().Initialize();
-    }
+    private static void initializeGraphics() { levelManager.InitializeLevel(); }
 
     private static void drawFrameEvent() {
-        instance.worldManager.SetLookAt();
-        instance.worldManager.DrawCurrentWorld();
+        levelManager.SetLookAt();
+        // Graphics.Mid();
+        NextRenderExecutioner.BeginRendering();
+        levelManager.DrawCurrentWorld();
     }
 }

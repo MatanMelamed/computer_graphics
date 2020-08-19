@@ -5,24 +5,25 @@ import Core.Graphics.WindowManager;
 import Models.Axis;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.function.Consumer;
 
 public class InputManager implements KeyListener, MouseListener {
 
-
-    public static float x = 0;
-    public static float y = 0;
-    public static float z = -1;
     private static float sens = 2;
 
     // members
     private Map<Short, Runnable> bindings;
+    private HashMap<Short, Boolean> isPressed = new HashMap<>();
+    private ArrayBlockingQueue<Consumer<MouseEvent>> mousePressListeners = new ArrayBlockingQueue<>(15);
+    private volatile boolean shouldRotatePlayer = false;
 
-    private double currentXAngle = Math.PI;
     private Robot robot;
     private int centerX, centerY;
 
@@ -42,31 +43,6 @@ public class InputManager implements KeyListener, MouseListener {
     }
     //endregion
 
-    public static void Initialize() {
-        instance.centerX = WindowManager.GetWindowWidth() / 2;
-        instance.centerY = WindowManager.GetWindowHeight() / 2;
-    }
-
-
-    public static void RegisterBinding(short key, Runnable r) {
-        instance.bindings.put(key, r);
-
-    }
-
-    public void SetDefaultBinding() {
-        bindings.clear();
-        bindings.put(KeyEvent.VK_ESCAPE, () -> System.exit(0));
-    }
-
-
-    @Override
-    public void keyPressed(com.jogamp.newt.event.KeyEvent e) {
-        var r = bindings.get(e.getKeyCode());
-        if (r != null) {
-            r.run();
-        }
-    }
-
     private void calculateAndSetHorizontalAxis(com.jogamp.newt.event.MouseEvent mouseEvent) {
         int deltaX = mouseEvent.getX() - centerX + 8;
 
@@ -75,13 +51,6 @@ public class InputManager implements KeyListener, MouseListener {
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
 
         GameManager.GetPlayer().Rotate(Axis.Y, Math.toDegrees(angleAddition * (deltaX > 0 ? 1d : -1d)) % 360);
-
-//        currentXAngle = currentXAngle + angleAddition * (deltaX > 0 ? 1d : -1d);
-//
-//        x = (float) Math.sin(currentXAngle);
-//        z = (float) Math.cos(currentXAngle);
-//
-//        currentXAngle = Math.toRadians(Math.toDegrees(currentXAngle) % 360);
     }
 
     private void calculateAndSetVerticalAxis(com.jogamp.newt.event.MouseEvent mouseEvent) {
@@ -93,11 +62,6 @@ public class InputManager implements KeyListener, MouseListener {
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
 
         GameManager.GetPlayer().Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
-//
-//
-//        y += r * (deltaY > 0 ? 1f : -1f);
-//
-//        y = Math.max(-0.5f, Math.min(0.5f, y));
     }
 
     private void calculateAndSetLookAtVectorValues(com.jogamp.newt.event.MouseEvent mouseEvent) {
@@ -105,23 +69,62 @@ public class InputManager implements KeyListener, MouseListener {
         calculateAndSetVerticalAxis(mouseEvent);
     }
 
+    public static void TurnOnMouseRotatePlayer() {instance.shouldRotatePlayer = true;}
+
+    public static void TurnOffMouseRotatePlayer() {instance.shouldRotatePlayer = false;}
+
+    public static void RegisterMousePressListener(Consumer<MouseEvent> r) {instance.mousePressListeners.add(r);}
+
+    public static boolean isPressed(Short key) {
+        return instance.isPressed.get(key) != null ? instance.isPressed.get(key) : false;
+    }
+
+    public static void Initialize() {
+        instance.centerX = WindowManager.GetWindowWidth() / 2;
+        instance.centerY = WindowManager.GetWindowHeight() / 2;
+    }
+
+
+    public static void RegisterBinding(short key, Runnable r) {
+        instance.bindings.put(key, r);
+    }
+
+    public void SetDefaultBinding() {
+        bindings.clear();
+        bindings.put(KeyEvent.VK_ESCAPE, () -> System.exit(0));
+    }
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        isPressed.put(e.getKeyCode(), true);
+        var r = bindings.get(e.getKeyCode());
+        if (r != null) {
+            r.run();
+        }
+    }
+
     @Override
     public void mouseMoved(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-        if (mouseEvent.getX() - centerX < 100 && mouseEvent.getY() - centerY < 100) {
-            calculateAndSetLookAtVectorValues(mouseEvent);
+        if(shouldRotatePlayer){
+            if (mouseEvent.getX() - centerX < 100 && mouseEvent.getY() - centerY < 100) {
+                calculateAndSetLookAtVectorValues(mouseEvent);
+            }
+            robot.mouseMove(centerX, centerY);
         }
-        robot.mouseMove(centerX, centerY);
     }
 
     @Override
     public void keyReleased(com.jogamp.newt.event.KeyEvent keyEvent) {
-
+        isPressed.put(keyEvent.getKeyCode(), false);
     }
 
 
     @Override
     public void mouseClicked(com.jogamp.newt.event.MouseEvent mouseEvent) {
+        for (Consumer<com.jogamp.newt.event.MouseEvent> c : instance.mousePressListeners) {
+            c.accept(mouseEvent);
+        }
         System.out.println(String.format("(%d, %d)", mouseEvent.getX(), mouseEvent.getY()));
     }
 

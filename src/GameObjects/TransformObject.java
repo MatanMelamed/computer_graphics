@@ -7,9 +7,7 @@ import Models.Vector3D;
 public abstract class TransformObject {
     private Transform transform = new Transform();
 
-    public void Move(float x, float y, float z) { Move(new Vector3D(x, y, z)); }
-
-    public void Move(Vector3D delta) { transform.Move(delta);}
+    public void Move(float x, float y, float z) { transform.Move(new Vector3D(x, y, z)); }
 
     public void Rotate(Axis axis, double angle) { transform.Rotate(axis, angle);}
 
