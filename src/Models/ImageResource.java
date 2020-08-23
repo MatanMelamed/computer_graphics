@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 import Core.Graphics.WindowManager;
@@ -21,7 +22,7 @@ public class ImageResource {
         try {
             image = ImageIO.read(url);
         } catch (IOException e) {
-            System.out.println(String.format("Cannot find image in %s","/images/" + path));
+            System.err.println("Cannot find image in /images/" + path);
             e.printStackTrace();
         }
 

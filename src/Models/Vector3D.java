@@ -1,7 +1,9 @@
 // Matan Melamed 205973613
 package Models;
 
-public class Vector3D {
+import static Utils.Utils.areEqual;
+
+public class Vector3D implements Comparable<Vector3D> {
 
     public float x;
     public float y;
@@ -88,7 +90,7 @@ public class Vector3D {
                 x * other.y - y * other.x);
     }
 
-    public double dot(Vector3D other) {
+    public float dot(Vector3D other) {
         return x * other.x + y * other.y + z * other.z;
     }
 
@@ -96,8 +98,8 @@ public class Vector3D {
         return (float) Math.sqrt(dot(this));
     }
 
-    public double angle() {
-        double result = Math.toDegrees(Math.atan2(y, x));
+    public float angle() {
+        float result = (float) Math.toDegrees(Math.atan2(y, x));
         return result < 0 ? 360 + result : result;
     }
 
@@ -109,12 +111,30 @@ public class Vector3D {
         return new Vector3D(x / magnitude, y / magnitude, z / magnitude);
     }
 
-    public double angleBetween(Vector3D other) {
-        return Math.acos(this.dot(other) / (this.magnitude() * other.magnitude()));
+    public float angleBetween(Vector3D other) {
+        if (this.compareTo(other) == 0) { return 0; }
+
+        float dot = this.dot(other);
+        float m1 = this.magnitude();
+        float m2 = other.magnitude();
+        float mags = m1 * m2;
+        float res = dot / mags;
+        res = (float) Math.acos(res);
+
+        Vector3D cross = cross(other);
+        return cross.dot(Transform.WORLD_Y) < 0 ? res : -res;
     }
 
     @Override
     public String toString() {
         return String.format("(%.4f, %.4f, %.4f)", x, y, z);
+    }
+
+    @Override
+    public int compareTo(Vector3D o) {
+        boolean a = areEqual(this.x, o.x);
+        boolean b = areEqual(this.y, o.y);
+        boolean c = areEqual(this.z, o.z);
+        return areEqual(this.x, o.x) && areEqual(this.y, o.y) && areEqual(this.z, o.z) ? 0 : 1;
     }
 }

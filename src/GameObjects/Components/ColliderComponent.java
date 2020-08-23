@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects.Components;
 
 import Core.Collision.*;
@@ -12,7 +13,6 @@ public class ColliderComponent extends GameObjectComponent {
     private Collider collider;
     private CollisionHanlder hanlder;
     public boolean passive;
-    public boolean debugOn = false;
 
     public ColliderComponent(Collider collider) {
         this(collider, null, true);
@@ -52,7 +52,7 @@ public class ColliderComponent extends GameObjectComponent {
 
     @Override
     public void Render() {
-        if (!debugOn) return;
+        if (!isDebug) return;
 
         Vector3D parentPos = GetParent().GetPosition();
 

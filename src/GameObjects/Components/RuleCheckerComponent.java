@@ -1,25 +1,22 @@
+// Matan Melamed 205973613
 package GameObjects.Components;
 
 import GameObjects.GameObjectComponent;
 
 import java.util.function.Supplier;
 
-public class RuleChecker extends GameObjectComponent {
+public class RuleCheckerComponent extends GameObjectComponent {
 
     private boolean isOnce;
     private boolean hasTriggered;
     private Supplier<Boolean> checker;
     private Runnable callback;
 
-    public RuleChecker(boolean isOnce, Supplier<Boolean> checker, Runnable callback) {
+    public RuleCheckerComponent(boolean isOnce, Supplier<Boolean> rules, Runnable callback) {
         this.isOnce = isOnce;
-        this.checker = checker;
+        this.checker = rules;
         this.callback = callback;
         this.hasTriggered = false;
-    }
-
-    public RuleChecker(Supplier<Boolean> checker, Runnable callback) {
-        this(true, checker, callback);
     }
 
     public void Reset() {
@@ -33,11 +30,11 @@ public class RuleChecker extends GameObjectComponent {
 
     @Override
     public void Update(float deltaTime) {
-        if (!(isOnce && hasTriggered)) {
-            if (checker.get()) {
-                callback.run();
-                hasTriggered = true;
-            }
+        if (hasTriggered && isOnce) return;
+
+        if (checker.get()) {
+            callback.run();
+            hasTriggered = true;
         }
     }
 

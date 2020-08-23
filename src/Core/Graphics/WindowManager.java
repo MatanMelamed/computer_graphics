@@ -1,8 +1,10 @@
+// Matan Melamed 205973613
 package Core.Graphics;
 
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 
 public class WindowManager {
@@ -41,8 +43,13 @@ public class WindowManager {
     // Private implementations
 
     private void initialize(String appName, int width, int height) {
+        Toolkit t = Toolkit.getDefaultToolkit();
+        Image i = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Cursor noCursor = t.createCustomCursor(i, new Point(0, 0), "none");
+
         isInit = true;
         frame = new Frame(appName);
+        frame.setCursor(noCursor);
         frame.setSize(width, height);
         frame.setLayout(new BorderLayout());
         frame.add(canvas, java.awt.BorderLayout.CENTER);

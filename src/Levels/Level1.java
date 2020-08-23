@@ -1,8 +1,7 @@
-package World;
+// Matan Melamed 205973613
+package Levels;
 
 import Core.Collision.AxisAlignedBoundingBox;
-import Core.Collision.Collider;
-import Core.InputManager;
 import GameObjects.Components.ColliderComponent;
 import GameObjects.Components.MaterialComponent;
 import GameObjects.Components.WavefrontComponent;
@@ -11,37 +10,16 @@ import GameObjects.Prefabs.BoxObject;
 import GameObjects.Prefabs.PlateObject;
 import Models.Axis;
 import Models.Vector3D;
-import com.jogamp.newt.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static Utils.Utils.floats;
 
-
 public class Level1 extends BaseLevel {
 
-
-    public GameObject maze;
-    public GameObject startBarrier;
-
-    private float[] finishRectange;
-    private float[] spawn;
-    private float[] enemySpawn;
-
-    @Override
-    public float[] GetSpawnPoint() { return spawn;}
-
-    @Override
-    public GameObject GetBarrier() { return startBarrier; }
-
-    @Override
-    public float[] GetFinishRectangle() { return finishRectange; }
-
-    @Override
-    public float[] GetEnemySpawn() { return enemySpawn; }
-
     public Level1() {
+        super(1);
         float w = 0.5f;     // wall thickness
         float g = 2f;   // gap between walls
         float h = 7f;       // maze playerHeight
@@ -194,6 +172,15 @@ public class Level1 extends BaseLevel {
         skull.Move(-1, 0, -2.5f * (w + g) - 1);
         skull.Rotate(Axis.Y, 220);
         decorations.AddChild(skull);
+
+        PlateObject picture = new PlateObject("picture", "spooky.jpg", 1, 1, 3, 2);
+        picture.Rotate(Axis.X, -90);
+        picture.Rotate(Axis.Z, 90);
+        picture.Move(5.9000f, 1.2000f, -4.0000f);
+//        ControllableObject c = new ControllableObject(picture);
+        decorations.AddChild(picture);
+
+
         return decorations;
     }
 
@@ -208,7 +195,7 @@ public class Level1 extends BaseLevel {
         room.AddChild(plate);
 
         // left wall (X,0,0)
-        plate = new PlateObject("wall", "prison_bars.jpg", depth / 4, 1, depth, height);
+        plate = new PlateObject("wall", "t.jpg", depth / 2f, 1, depth, height);
         plate.Rotate(Axis.X, -90);
         plate.Rotate(Axis.Z, 90);
 
@@ -222,7 +209,7 @@ public class Level1 extends BaseLevel {
         room.AddChild(plate);
 
         // right wall
-        plate = new PlateObject("wall", "prison_bars.jpg", depth / 4, 1, depth, height);
+        plate = new PlateObject("wall", "t.jpg", depth / 2f, 1, depth, height);
         plate.Rotate(Axis.X, -90);
         plate.Rotate(Axis.Z, -90);
 
@@ -236,7 +223,7 @@ public class Level1 extends BaseLevel {
         room.AddChild(plate);
 
         // back wall
-        plate = new PlateObject("wall", "prison_bars.jpg", depth / 4, 1, width, height);
+        plate = new PlateObject("wall", "t.jpg", width / 2f, 1, width, height);
         plate.Rotate(Axis.X, -90);
         plate.Rotate(Axis.Z, 180);
 

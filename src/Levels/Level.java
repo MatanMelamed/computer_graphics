@@ -1,4 +1,5 @@
-package World;
+// Matan Melamed 205973613
+package Levels;
 
 import GameObjects.GameObject;
 import Models.Vector3D;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 
 public interface Level {
     void Initialize();
+
+    boolean IsInit();
 
     void Update(float deltaTime);
 
@@ -23,4 +26,6 @@ public interface Level {
     GameObject GetBarrier();
 
     ArrayList<Vector3D> GetEnemyRoute();
+
+    int GetNumber();
 }

@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects;
 
 import Models.Axis;
@@ -5,7 +6,13 @@ import Models.Transform;
 import Models.Vector3D;
 
 public abstract class TransformObject {
-    private Transform transform = new Transform();
+    private Transform transform;
+
+    TransformObject() {
+        transform = new Transform();
+    }
+
+    protected void SetDirZ(Vector3D newDirZ) {this.transform.DirZ = newDirZ;}
 
     public void Move(float x, float y, float z) { transform.Move(new Vector3D(x, y, z)); }
 

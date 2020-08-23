@@ -1,15 +1,16 @@
+// Matan Melamed 205973613
 package GameObjects;
 
-import Models.Vector3D;
 
 public abstract class GameObjectComponent implements Comparable<GameObjectComponent> {
 
-    public GameObject parent;
+    private GameObject parent;
     public boolean isEnabled = true;
+    protected boolean isDebug = false;
 
     protected int priority = 0;
 
-    public void SetParent(GameObject parent) {
+    void SetParent(GameObject parent) {
         this.parent = parent;
     }
 

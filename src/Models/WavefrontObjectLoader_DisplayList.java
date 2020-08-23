@@ -1,22 +1,22 @@
 package Models;
 
 /**
- **   __ __|_  ___________________________________________________________________________  ___|__ __
- **  //    /\                                           _                                  /\    \\  
- ** //____/  \__     __ _____ _____ _____ _____ _____  | |     __ _____ _____ __        __/  \____\\ 
- **  \    \  / /  __|  |     |   __|  _  |     |  _  | | |  __|  |     |   __|  |      /\ \  /    /  
- **   \____\/_/  |  |  |  |  |  |  |     | | | |   __| | | |  |  |  |  |  |  |  |__   "  \_\/____/   
- **  /\    \     |_____|_____|_____|__|__|_|_|_|__|    | | |_____|_____|_____|_____|  _  /    /\     
- ** /  \____\                       http://jogamp.org  |_|                              /____/  \    
- ** \  /   "' _________________________________________________________________________ `"   \  /    
- **  \/____.                                                                             .____\/     
- **
- ** Wavefront .obj mesh loader with vertices, face and normal support. Provides a convenience
- ** method to load the whole model as display-list. The code is slightly modified copypasta from
- ** the open source project "jglmark" (https://jglmark.dev.java.net/). Original author is Chris 
- ** "Crash0veride007" Brown (crash0veride007@gmail.com). Also added support for compressed mesh
- ** files (.zip).
- **
+ * *   __ __|_  ___________________________________________________________________________  ___|__ __
+ * *  //    /\                                           _                                  /\    \\
+ * * //____/  \__     __ _____ _____ _____ _____ _____  | |     __ _____ _____ __        __/  \____\\
+ * *  \    \  / /  __|  |     |   __|  _  |     |  _  | | |  __|  |     |   __|  |      /\ \  /    /
+ * *   \____\/_/  |  |  |  |  |  |  |     | | | |   __| | | |  |  |  |  |  |  |  |__   "  \_\/____/
+ * *  /\    \     |_____|_____|_____|__|__|_|_|_|__|    | | |_____|_____|_____|_____|  _  /    /\
+ * * /  \____\                       http://jogamp.org  |_|                              /____/  \
+ * * \  /   "' _________________________________________________________________________ `"   \  /
+ * *  \/____.                                                                             .____\/
+ * *
+ * * Wavefront .obj mesh loader with vertices, face and normal support. Provides a convenience
+ * * method to load the whole model as display-list. The code is slightly modified copypasta from
+ * * the open source project "jglmark" (https://jglmark.dev.java.net/). Original author is Chris
+ * * "Crash0veride007" Brown (crash0veride007@gmail.com). Also added support for compressed mesh
+ * * files (.zip).
+ * *
  **/
 
 
@@ -25,7 +25,9 @@ import java.nio.*;
 import java.util.*;
 import java.util.zip.*;
 import javax.media.opengl.*;
+
 import com.jogamp.opengl.util.*;
+
 import static javax.media.opengl.GL2.*;
 
 public class WavefrontObjectLoader_DisplayList {
@@ -41,17 +43,17 @@ public class WavefrontObjectLoader_DisplayList {
     private int FaceFormat;                                         //format of the faces triangles or quads
     private int FaceMultiplier;                                     //number of possible coordinates per face
     private int PolyCount = 0;                                      //the model polygon count
-    private boolean init  = true;
+    private boolean init = true;
 
     public WavefrontObjectLoader_DisplayList(String inModelPath) {
-        BaseLogging.getInstance().info("LOADING WAVEFRONT OBJECT MODEL "+inModelPath);
+        BaseLogging.getInstance().info("LOADING WAVEFRONT OBJECT MODEL " + inModelPath);
         OBJModelPath = inModelPath;
         LoadOBJModel(OBJModelPath);
         SetFaceRenderType();
-        BaseLogging.getInstance().info("POLYGON COUNT FOR MODEL="+PolyCount);
-        BaseLogging.getInstance().info("VERTEX COUNT FOR MODEL="+vData.size());
-        BaseLogging.getInstance().info("TEXTURE COORDINATE COUNT FOR MODEL="+vtData.size());
-        BaseLogging.getInstance().info("NORMAL COUNT FOR MODEL="+vnData.size());
+        BaseLogging.getInstance().info("POLYGON COUNT FOR MODEL=" + PolyCount);
+        BaseLogging.getInstance().info("VERTEX COUNT FOR MODEL=" + vData.size());
+        BaseLogging.getInstance().info("TEXTURE COORDINATE COUNT FOR MODEL=" + vtData.size());
+        BaseLogging.getInstance().info("NORMAL COUNT FOR MODEL=" + vnData.size());
     }
 
     private void LoadOBJModel(String ModelPath) {
@@ -60,14 +62,14 @@ public class WavefrontObjectLoader_DisplayList {
             if (ModelPath.endsWith(".zip")) {
                 BaseLogging.getInstance().info("WAVEFRONT MESH IS COMPRESSED! TRY TO EXTRACT FIRST/SINGLE ENTRY!");
                 ZipInputStream tZipInputStream = new ZipInputStream(new FileInputStream(ModelPath));
-                		//new InputStreamReader(new BufferedInputStream((new Object()).getClass().getResourceAsStream(ModelPath)));
+                //new InputStreamReader(new BufferedInputStream((new Object()).getClass().getResourceAsStream(ModelPath)));
                 ZipEntry tZipEntry;
                 tZipEntry = tZipInputStream.getNextEntry();
                 String inZipEntryName = tZipEntry.getName();
-                if (inZipEntryName==null) {
+                if (inZipEntryName == null) {
                     BaseLogging.getInstance().fatalerror("ERROR! ZIP ENTRY IS NULL!");
                 }
-                BaseLogging.getInstance().info("EXTRACTING: "+inZipEntryName);
+                BaseLogging.getInstance().info("EXTRACTING: " + inZipEntryName);
                 if (!tZipEntry.isDirectory()) {
                     br = new BufferedReader(new InputStreamReader(tZipInputStream));
                 } else {
@@ -75,7 +77,7 @@ public class WavefrontObjectLoader_DisplayList {
                 }
             } else {
                 br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(ModelPath)));
-                		/*(new Object()).getClass().getResourceAsStream(ModelPath)));*/
+                /*(new Object()).getClass().getResourceAsStream(ModelPath)));*/
             }
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -94,7 +96,7 @@ public class WavefrontObjectLoader_DisplayList {
                 }
             }
             br.close();
-            BaseLogging.getInstance().info("MODEL "+ModelPath+" SUCCESSFULLY LOADED!");
+            BaseLogging.getInstance().info("MODEL " + ModelPath + " SUCCESSFULLY LOADED!");
         } catch (IOException e) {
             BaseLogging.getInstance().fatalerror(e);
         }
@@ -151,13 +153,13 @@ public class WavefrontObjectLoader_DisplayList {
     private void SetFaceRenderType() {
         final int temp[] = (int[]) fv.get(0);
         if (temp.length == 3) {
-            FaceFormat = GL_TRIANGLES; 	//the faces come in sets of 3 so we have triangular faces
+            FaceFormat = GL_TRIANGLES;    //the faces come in sets of 3 so we have triangular faces
             FaceMultiplier = 3;
         } else if (temp.length == 4) {
-            FaceFormat = GL_QUADS; 		//the faces come in sets of 4 so we have quadrilateral faces
+            FaceFormat = GL_QUADS;        //the faces come in sets of 4 so we have quadrilateral faces
             FaceMultiplier = 4;
         } else {
-            FaceFormat = GL_POLYGON; 	//fall back to render as free form polygons
+            FaceFormat = GL_POLYGON;    //fall back to render as free form polygons
         }
     }
 
@@ -296,10 +298,10 @@ public class WavefrontObjectLoader_DisplayList {
         modeldata.clear();
     }
 
-    public static int loadWavefrontObjectAsDisplayList(GL2 inGL,String inFileName) {
+    public static int loadWavefrontObjectAsDisplayList(GL2 inGL, String inFileName) {
         int tDisplayListID = inGL.glGenLists(1);
         WavefrontObjectLoader_DisplayList tWaveFrontObjectModel = new WavefrontObjectLoader_DisplayList(inFileName);
-        inGL.glNewList(tDisplayListID,GL_COMPILE);
+        inGL.glNewList(tDisplayListID, GL_COMPILE);
         tWaveFrontObjectModel.drawModel(inGL);
         inGL.glEndList();
         return tDisplayListID;

@@ -1,11 +1,12 @@
+// Matan Melamed 205973613
 package Core.Collision;
 
 import Models.Vector3D;
 
 public class BoundingSphere extends Collider {
 
-    Vector3D center;
-    float radius;
+    private Vector3D center;
+    private float radius;
 
     public BoundingSphere(Vector3D center, float radius) {
         super(ColliderType.BS);

@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Models;
 
 public class Transform {
@@ -15,7 +16,7 @@ public class Transform {
         Position = new Vector3D(0, 0, 0);
         DirX = new Vector3D(1, 0, 0);
         DirY = new Vector3D(0, 1, 0);
-        DirZ = new Vector3D(0, 0, 1);
+        DirZ = new Vector3D(0, 0, -1);
         xDiv = yDiv = zDiv = 0;
     }
 
@@ -45,10 +46,11 @@ public class Transform {
             zDiv = (zDiv + angle) % 360;
         }
 
-        angle = Math.toRadians(angle);
+        angle = Math.toRadians(-angle);
 
         newA = a.multiply(Math.cos(angle)).plus(b.multiply(Math.sin(angle)));
-        newB = b.multiply(Math.cos(angle)).minus(a.multiply(Math.sin(angle)));
+        newB = a.multiply(-Math.sin(angle)).plus(b.multiply(Math.cos(angle)));
+//        newB = b.multiply(Math.cos(angle)).minus(a.multiply(Math.sin(angle)));
 
         a.Set(newA.normalize());
         b.Set(newB.normalize());

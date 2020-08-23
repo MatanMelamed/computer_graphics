@@ -1,4 +1,5 @@
-package World;
+// Matan Melamed 205973613
+package Levels;
 
 import Core.Collision.CollisionChecker;
 import Core.Collision.IntersectData;
@@ -15,12 +16,35 @@ public abstract class BaseLevel implements Level {
     private ArrayList<ColliderComponent> colliderComponents = new ArrayList<>();
     ArrayList<Vector3D> enemiesRoute = new ArrayList<>();
 
+    GameObject maze;
+    GameObject startBarrier;
 
-    protected abstract void InitializeEnemiesRoute();
+
+    float[] finishRectange;
+    float[] spawn;
+    float[] enemySpawn;
+
+    private boolean isInit;
+    private int level;
 
     BaseLevel() {
         InitializeEnemiesRoute();
     }
+
+    BaseLevel(int level) {
+        this();
+        this.level = level;
+    }
+
+    @Override
+    public int GetNumber() {
+        return level;
+    }
+
+    @Override
+    public boolean IsInit() { return isInit; }
+
+    protected abstract void InitializeEnemiesRoute();
 
     @Override
     public ArrayList<Vector3D> GetEnemyRoute() {
@@ -31,8 +55,7 @@ public abstract class BaseLevel implements Level {
     public void Initialize() {
         root.InitializeAll();
         collectObjectsWithCollider(root);
-        System.out.println(colliderComponents.size() + " colliders");
-//        root.sout(0);
+        isInit = true;
     }
 
     @Override
@@ -88,7 +111,7 @@ public abstract class BaseLevel implements Level {
         }
     }
 
-    protected void CreateAxisMarkers() {
+    void CreateAxisMarkers() {
         BoxObject boxObject = new BoxObject("red box", 1, 1, 1, "red.png");
         boxObject.Move(10, 15, 0);
         AddGameObject(boxObject);
@@ -99,4 +122,16 @@ public abstract class BaseLevel implements Level {
         boxObject.Move(0, 15, 0);
         AddGameObject(boxObject);
     }
+
+    @Override
+    public float[] GetSpawnPoint() { return spawn;}
+
+    @Override
+    public GameObject GetBarrier() { return startBarrier; }
+
+    @Override
+    public float[] GetFinishRectangle() { return finishRectange; }
+
+    @Override
+    public float[] GetEnemySpawn() { return enemySpawn; }
 }

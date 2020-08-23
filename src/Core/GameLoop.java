@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Core;
 
 public class GameLoop {
@@ -26,7 +27,7 @@ public class GameLoop {
         SetFPS(144);
     }
 
-    public void SetFPS(int fps) {
+    private void SetFPS(int fps) {
         targetFPS = fps;
         timeBetweenUpdatesInNanoSec = 1000000000f / fps;
         timeBetweenUpdatesInSec = 1f / fps;
@@ -68,7 +69,7 @@ public class GameLoop {
         float deltaTime = startUpdateTime - lastUpdateTime;
         while (deltaTime >= timeBetweenUpdatesInNanoSec) {
 
-            GameManager.Update(deltaTime / 1000000f);
+            GameFramework.Update(deltaTime / 1000000f);
 
 //            lastUpdateTime += timeBetweenUpdatesInNanoSec;
             lastUpdateTime = System.nanoTime();
@@ -82,6 +83,6 @@ public class GameLoop {
     }
 
     private void updateGraphics() {
-        GameManager.Render();
+        GameFramework.Render();
     }
 }

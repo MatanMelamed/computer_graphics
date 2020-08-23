@@ -1,27 +1,29 @@
+// Matan Melamed 205973613
 package GameObjects.Prefabs;
 
-import GameObjects.Components.MaterialComponent;
+import Core.Collision.AxisAlignedBoundingBox;
+import GameObjects.Components.ColliderComponent;
 import GameObjects.GameObject;
 import GameObjects.Components.TexturedGLListComponent;
 import Core.Graphics.Graphics;
+import Models.Vector3D;
 
 import java.util.function.Supplier;
 
-import static Utils.Utils.floats;
 
 public class BoxObject extends GameObject {
-    private float width, height, depth;
 
     public BoxObject(String name, float width, float height, float depth, String image) {
         super(name);
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
 
         Supplier<Integer> glGenerator = () -> Graphics.Create3DTexturedRectangle(width, height, depth, 1, 1);
         TexturedGLListComponent graphics = new TexturedGLListComponent(image, glGenerator);
         AddComponent(graphics);
-//        AddComponent(new MaterialComponent(floats(0.9f, 0.9f, 0.9f, 1f)));
+
+        Vector3D minPoint = new Vector3D(-width / 2f, -height / 2f, -depth / 2f);
+        AxisAlignedBoundingBox collider = new AxisAlignedBoundingBox(minPoint, minPoint.multiply(-1f));
+        ColliderComponent colliderComponent = new ColliderComponent(collider, true);
+        AddComponent(colliderComponent);
     }
 
     @Override

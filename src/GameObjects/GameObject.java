@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects;
 
 import Core.Graphics.Graphics;
@@ -7,15 +8,17 @@ import Models.Vector3D;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static Utils.Utils.floats;
 
 public class GameObject extends TransformObject {
 
-
-    boolean isEnabled = true;
-    public String name;
-    public ArrayList<GameObject> children = new ArrayList<>();
+    private ArrayList<GameObject> children = new ArrayList<>();
     private ArrayList<GameObjectComponent> components = new ArrayList<>();
+    private boolean isEnabled = true;
+
+    protected boolean isDebug = false;
+
+    public String name;
+
 
     public GameObject() {
         this("object");
@@ -24,6 +27,8 @@ public class GameObject extends TransformObject {
     public GameObject(String name) {
         this.name = name;
     }
+
+    public boolean IsEnabled() {return isEnabled;}
 
     public void Enable() {
         isEnabled = true;
@@ -50,6 +55,14 @@ public class GameObject extends TransformObject {
         Move(-current.x, -current.y, -current.z);
     }
 
+    public void ResetRotation() {
+        float x = (float) this.GetAxisAngleX();
+        float y = (float) this.GetAxisAngleY();
+//        float z = (float) this.GetAxisAngleZ();
+        Rotate(Axis.Y, -y);
+        Rotate(Axis.X, -x);
+    }
+
     @Override
     public void Move(float x, float y, float z) {
         for (int i = 0; i < children.size(); i++) {
@@ -68,9 +81,6 @@ public class GameObject extends TransformObject {
 
     @Override
     public void Rotate(Axis axis, double angle) {
-//        for (int i = 0; i < children.size(); i++) {
-//            children.get(i).Rotate(axis, angle);
-//        }
         super.Rotate(axis, angle);
     }
 
@@ -145,11 +155,10 @@ public class GameObject extends TransformObject {
         Graphics.PopMatrix();
     }
 
-    public void sout(int level) {
-
+    public void PrintAll(int level) {
         System.out.println("\t".repeat(level) + name);
         for (GameObject child : children) {
-            child.sout(level + 1);
+            child.PrintAll(level + 1);
         }
     }
 

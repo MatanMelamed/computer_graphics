@@ -1,18 +1,18 @@
+// Matan Melamed 205973613
 package GameObjects.Components;
 
-import Core.Graphics.Debugger;
 import GameObjects.GameObjectComponent;
 
 public class TimeLooperComponent extends GameObjectComponent {
 
-    float turningOffTime;
-    float turningOnTime;
-    float peakOnTime;
-    float peakOffTime;
+    private float turningOffTime;
+    private float turningOnTime;
+    private float peakOnTime;
+    private float peakOffTime;
 
-    float currentTime = 0;
-    boolean currentlyOn = false;
-    boolean currentlyPeak = false;
+    private float currentTime;
+    private boolean currentlyOn;
+    private boolean currentlyPeak;
 
     public float relativeValue = 1;
 
@@ -21,13 +21,18 @@ public class TimeLooperComponent extends GameObjectComponent {
         this.turningOnTime = turningOnTime * 1000f;
         this.peakOnTime = peakOnTime * 1000f;
         this.peakOffTime = peakOffTime * 1000f;
-        Debugger.AddDebug(() -> String.format("on:%s peak:%s value:%.2f timeleft: %.4f", currentlyOn, currentlyPeak, relativeValue, currentTime / 1000f));
+        Reset();
+
+    }
+
+    public void Reset() {
+        this.currentTime = 0;
+        this.currentlyPeak = true;
+        this.currentlyOn = false;
     }
 
     @Override
-    public void Initialize() {
-
-    }
+    public void Initialize() {}
 
     @Override
     public void Update(float deltaTime) {
@@ -56,7 +61,5 @@ public class TimeLooperComponent extends GameObjectComponent {
     }
 
     @Override
-    public void Render() {
-
-    }
+    public void Render() {}
 }

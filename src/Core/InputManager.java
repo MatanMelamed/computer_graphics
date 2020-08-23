@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package Core;
 
 import Core.Graphics.WindowManager;
@@ -5,14 +6,11 @@ import Core.Graphics.WindowManager;
 import Models.Axis;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.function.Consumer;
 
 public class InputManager implements KeyListener, MouseListener {
 
@@ -21,8 +19,7 @@ public class InputManager implements KeyListener, MouseListener {
     // members
     private Map<Short, Runnable> bindings;
     private HashMap<Short, Boolean> isPressed = new HashMap<>();
-    private ArrayBlockingQueue<Consumer<MouseEvent>> mousePressListeners = new ArrayBlockingQueue<>(15);
-    private volatile boolean shouldRotatePlayer = false;
+    private volatile boolean shouldRotatePlayer = true;
 
     private Robot robot;
     private int centerX, centerY;
@@ -54,14 +51,13 @@ public class InputManager implements KeyListener, MouseListener {
     }
 
     private void calculateAndSetVerticalAxis(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
         int deltaY = mouseEvent.getY() - centerY + 31;
 
         float r = Math.abs(deltaY) / (centerY * 2f) * sens;
 
         double angleAddition = Math.asin((r / Math.sqrt(Math.pow(r, 2) + 1)));
 
-        GameManager.GetPlayer().Rotate(Axis.X, Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
+        GameManager.GetPlayer().Rotate(Axis.X, -Math.toDegrees(angleAddition * (deltaY > 0 ? 1d : -1d)) % 360);
     }
 
     private void calculateAndSetLookAtVectorValues(com.jogamp.newt.event.MouseEvent mouseEvent) {
@@ -69,11 +65,10 @@ public class InputManager implements KeyListener, MouseListener {
         calculateAndSetVerticalAxis(mouseEvent);
     }
 
-    public static void TurnOnMouseRotatePlayer() {instance.shouldRotatePlayer = true;}
+    static void TurnOnMouseRotatePlayer() {instance.shouldRotatePlayer = true;}
 
-    public static void TurnOffMouseRotatePlayer() {instance.shouldRotatePlayer = false;}
+    static void TurnOffMouseRotatePlayer() {instance.shouldRotatePlayer = false;}
 
-    public static void RegisterMousePressListener(Consumer<MouseEvent> r) {instance.mousePressListeners.add(r);}
 
     public static boolean isPressed(Short key) {
         return instance.isPressed.get(key) != null ? instance.isPressed.get(key) : false;
@@ -89,7 +84,7 @@ public class InputManager implements KeyListener, MouseListener {
         instance.bindings.put(key, r);
     }
 
-    public void SetDefaultBinding() {
+    private void SetDefaultBinding() {
         bindings.clear();
         bindings.put(KeyEvent.VK_ESCAPE, () -> System.exit(0));
     }
@@ -106,7 +101,7 @@ public class InputManager implements KeyListener, MouseListener {
 
     @Override
     public void mouseMoved(com.jogamp.newt.event.MouseEvent mouseEvent) {
-        if(shouldRotatePlayer){
+        if (shouldRotatePlayer) {
             if (mouseEvent.getX() - centerX < 100 && mouseEvent.getY() - centerY < 100) {
                 calculateAndSetLookAtVectorValues(mouseEvent);
             }
@@ -119,43 +114,24 @@ public class InputManager implements KeyListener, MouseListener {
         isPressed.put(keyEvent.getKeyCode(), false);
     }
 
+    @Override
+    public void mouseClicked(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseClicked(com.jogamp.newt.event.MouseEvent mouseEvent) {
-        for (Consumer<com.jogamp.newt.event.MouseEvent> c : instance.mousePressListeners) {
-            c.accept(mouseEvent);
-        }
-        System.out.println(String.format("(%d, %d)", mouseEvent.getX(), mouseEvent.getY()));
-    }
+    public void mouseEntered(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseEntered(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
+    public void mouseExited(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseExited(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
+    public void mousePressed(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mousePressed(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
+    public void mouseReleased(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseReleased(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
-
+    public void mouseDragged(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseDragged(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseWheelMoved(com.jogamp.newt.event.MouseEvent mouseEvent) {
-
-    }
+    public void mouseWheelMoved(com.jogamp.newt.event.MouseEvent mouseEvent) {}
 }

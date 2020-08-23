@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects.Components;
 
 import Core.ResourceManager;
@@ -10,8 +11,8 @@ import java.util.function.Supplier;
 public class TexturedGLListComponent extends GameObjectComponent {
 
     private Supplier<Integer> glListGenerator;
-    protected int objectGLList;
-    protected ImageResource imageResource;
+    private int objectGLList;
+    private ImageResource imageResource;
 
     public TexturedGLListComponent(String imageName, Supplier<Integer> glListGenerator) {
         this.imageResource = ResourceManager.GetImageResourceByName(imageName);

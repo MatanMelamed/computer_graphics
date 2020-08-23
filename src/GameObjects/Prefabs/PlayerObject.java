@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects.Prefabs;
 
 import Core.Collision.BoundingSphere;
@@ -14,14 +15,14 @@ import com.jogamp.newt.event.KeyEvent;
 
 public class PlayerObject extends GameObject {
 
-    public static float Height = 1;
+    public static float playerHeight = 1;
     public float speed = 3f;
-    public Vector3D velocity = new Vector3D(0, 0, 0);
+    private Vector3D velocity = new Vector3D(0, 0, 0);
 
     public PlayerObject() {
         super("player");
 
-        BoundingSphere collider = new BoundingSphere(GetPosition(), 0.5f);
+        BoundingSphere collider = new BoundingSphere(GetPosition().plus(0, playerHeight / 2f, 0), 0.25f);
         CollisionHanlder hanlder = (data, other) ->
         {
             if (other.GetCollider().GetType() == ColliderType.BS) {
@@ -35,7 +36,6 @@ public class PlayerObject extends GameObject {
         };
         ColliderComponent colliderComponent = new ColliderComponent(collider, hanlder, false);
         AddComponent(colliderComponent);
-        Move(0, Height / 2f, 0);
     }
 
     @Override
@@ -66,13 +66,13 @@ public class PlayerObject extends GameObject {
             shouldMove = true;
         }
         if (InputManager.isPressed(KeyEvent.VK_A)) {
-            Vector3D addition = GetDirX().multiply(deltaTime * speed);
+            Vector3D addition = GetDirX().multiply(deltaTime * speed * -1f);
             addition = addition.plus(new Vector3D(0, -addition.y, 0));
             velocity = velocity.plus(addition);
             shouldMove = true;
         }
         if (InputManager.isPressed(KeyEvent.VK_D)) {
-            Vector3D addition = GetDirX().multiply(deltaTime * speed * -1f);
+            Vector3D addition = GetDirX().multiply(deltaTime * speed);
             addition = addition.plus(new Vector3D(0, -addition.y, 0));
             velocity = velocity.plus(addition);
 
@@ -125,6 +125,7 @@ public class PlayerObject extends GameObject {
     }
 
     public Vector3D GetDirection() {
-        return GetPosition().plus(GetDirZ()).plus(new Vector3D(0, Height / 2f, 0));
+//        return GetPosition().plus(GetDirZ()).plus(new Vector3D(0, playerHeight / 2f, 0));
+        return GetPosition().plus(GetDirZ()).plus(0, playerHeight, 0);
     }
 }

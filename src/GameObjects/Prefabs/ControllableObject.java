@@ -1,9 +1,8 @@
+// Matan Melamed 205973613
 package GameObjects.Prefabs;
 
-import Core.Graphics.Debugger;
 import Core.InputManager;
 import GameObjects.GameObject;
-import Models.Axis;
 import com.jogamp.newt.event.KeyEvent;
 
 public class ControllableObject extends GameObject {
@@ -15,7 +14,6 @@ public class ControllableObject extends GameObject {
         this.controlledObject = controlledObject;
         AddChild(controlledObject);
         initControl();
-        Debugger.AddDebug(() -> String.format("axe: %s", this.controlledObject.GetPosition()));
     }
 
     private void initControl() {
@@ -26,14 +24,9 @@ public class ControllableObject extends GameObject {
         InputManager.RegisterBinding(KeyEvent.VK_M, () -> controlledObject.Move(0, speed, 0));
         InputManager.RegisterBinding(KeyEvent.VK_N, () -> controlledObject.Move(0, -speed, 0));
 
-        InputManager.RegisterBinding(KeyEvent.VK_Q, () -> controlledObject.Rotate(Axis.X, speed * 100));
-        InputManager.RegisterBinding(KeyEvent.VK_W, () -> controlledObject.Rotate(Axis.X, -speed * 100));
-        InputManager.RegisterBinding(KeyEvent.VK_A, () -> controlledObject.Rotate(Axis.Y, speed * 100));
-        InputManager.RegisterBinding(KeyEvent.VK_S, () -> controlledObject.Rotate(Axis.Y, -speed * 100));
-        InputManager.RegisterBinding(KeyEvent.VK_Z, () -> controlledObject.Rotate(Axis.Z, speed * 100));
-        InputManager.RegisterBinding(KeyEvent.VK_X, () -> controlledObject.Rotate(Axis.Z, -speed * 100));
-
-        InputManager.RegisterBinding(KeyEvent.VK_C, () -> System.out.println(controlledObject));
+        InputManager.RegisterBinding(KeyEvent.VK_C, () -> {
+            System.out.println(String.format("%s", controlledObject.GetPosition()));
+        });
     }
 
     @Override

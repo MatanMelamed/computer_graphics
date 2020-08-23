@@ -1,3 +1,4 @@
+// Matan Melamed 205973613
 package GameObjects.Prefabs;
 
 import Core.Graphics.Graphics;
@@ -12,6 +13,7 @@ public class PlateObject extends GameObject {
     private float height;
     private float tHratio;
     private float tWratio;
+    private String imageName;
 
 
     public PlateObject(String name, String imageName, float textureWidthRatio, float textureHeightRatio, float width, float height) {
@@ -20,18 +22,14 @@ public class PlateObject extends GameObject {
         this.height = height;
         this.tWratio = textureWidthRatio;
         this.tHratio = textureHeightRatio;
+        this.imageName = imageName;
+    }
 
-        Supplier<Integer> glGenerator = () -> Graphics.Create2DTexturedPlane(width,height,tWratio,tHratio);
+    @Override
+    protected void Initialize() {
+        Supplier<Integer> glGenerator = () -> Graphics.Create2DTexturedPlane(width, height, tWratio, tHratio);
         TexturedGLListComponent graphics = new TexturedGLListComponent(imageName, glGenerator);
         AddComponent(graphics);
-        //graphics.Disable();
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
+        super.Initialize();
     }
 }

@@ -1,4 +1,3 @@
-Matan Melamed 205973613
 The game is about exiting a maze of each level before the monster does.
 The game starts after the player turns around to face the monster,
 then the wall that was in front of him will dissapear and he cound start the maze.

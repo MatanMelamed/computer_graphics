@@ -1,34 +1,36 @@
+// Matan Melamed 205973613
 package GameObjects.Components;
 
 import GameObjects.GameObjectComponent;
 
-public class Timer extends GameObjectComponent {
+public class TimerComponent extends GameObjectComponent {
 
-    Runnable timeUpCallback;
-    float currentTime;
-    float lastTimeToMeassure;
-    boolean shouldRun;
+    private Runnable timeUpCallback;
+    private float currentTime;
+    private float lastTimeToMeassure;
+    private boolean shouldRun;
 
-    public Timer(Runnable timeUpCallback, float currentTime) {
+    public TimerComponent(Runnable timeUpCallback, float currentTime) {
         this.timeUpCallback = timeUpCallback;
         this.shouldRun = false;
         SetTime(currentTime);
     }
 
-    public Timer() { this(null, 0); }
+    public TimerComponent() { this(null, 0); }
 
     public void SetCallback(Runnable newCallback) {this.timeUpCallback = newCallback;}
 
-    public void SetTime(float time) {lastTimeToMeassure = currentTime = time * 1000f;}
+    public void SetTime(float time) {lastTimeToMeassure = time * 1000f;}
 
-    public void Start() {shouldRun = true;}
-
-    public void Reset() {currentTime = lastTimeToMeassure; Start();}
+    public void Start() {
+        currentTime = lastTimeToMeassure;
+        shouldRun = true;
+    }
 
     @Override
-    public void Initialize() {
+    public void Initialize() {}
 
-    }
+    public boolean IsRunning() {return currentTime != 0;}
 
     @Override
     public void Update(float deltaTime) {
@@ -44,7 +46,5 @@ public class Timer extends GameObjectComponent {
     }
 
     @Override
-    public void Render() {
-
-    }
+    public void Render() {}
 }
