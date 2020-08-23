@@ -112,13 +112,13 @@ public abstract class BaseLevel implements Level {
     }
 
     void CreateAxisMarkers() {
-        BoxObject boxObject = new BoxObject("red box", 1, 1, 1, "red.png");
+        BoxObject boxObject = new BoxObject("red box", 1, 1, 1, "red.jpg");
         boxObject.Move(10, 15, 0);
         AddGameObject(boxObject);
-        boxObject = new BoxObject("yellow box", 1, 1, 1, "yellow.png");
+        boxObject = new BoxObject("yellow box", 1, 1, 1, "yellow.jpg");
         boxObject.Move(0, 15, 10);
         AddGameObject(boxObject);
-        boxObject = new BoxObject("green box", 1, 1, 1, "green.png");
+        boxObject = new BoxObject("green box", 1, 1, 1, "green.jpg");
         boxObject.Move(0, 15, 0);
         AddGameObject(boxObject);
     }

@@ -29,7 +29,7 @@ public class GameManager {
         F1 = new DelayedButtonPress(0.5f, KeyEvent.VK_F1, this::PausePressed);
         F2 = new DelayedButtonPress(0.5f, KeyEvent.VK_F2, this::ForceLevel2);
 
-        pauseMenu = new PlateObject("rules", "rules.png", 1, 1, 16, 9);
+        pauseMenu = new PlateObject("rules", "rules.jpg", 1, 1, 16, 9);
         pauseMenu.Rotate(Axis.X, -90);
         pauseMenu.Move(0, 2000, 0);
         pauseMenu.AddComponent(new LightComponent(6, floats(0.9f, 0.9f, 0.9f, 1), floats(0.9f, 0.9f, 0.9f, 1), floats(0, 0, -1, 0)));

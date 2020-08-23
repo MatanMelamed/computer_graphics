@@ -88,7 +88,7 @@ public class Level2 extends BaseLevel {
         spawn = floats(-2.5f * u + (srs / 2f), 0, -2.5f * u - g * 2f);
 
         // Maze
-        PlateObject plate = new PlateObject("floor", "square_floor.png", fl, fl, fl, fl);
+        PlateObject plate = new PlateObject("floor", "square_floor.jpg", fl, fl, fl, fl);
         maze.AddChild(plate);
 
         // surrounding walls
@@ -195,7 +195,7 @@ public class Level2 extends BaseLevel {
         AxisAlignedBoundingBox collider;
         ColliderComponent colliderComponent;
 
-        PlateObject plate = new PlateObject("floor", "square_floor.png", width, depth, width, depth);
+        PlateObject plate = new PlateObject("floor", "square_floor.jpg", width, depth, width, depth);
         room.AddChild(plate);
 
         // left wall (X,0,0)
@@ -255,7 +255,7 @@ public class Level2 extends BaseLevel {
         AxisAlignedBoundingBox collider;
         ColliderComponent colliderComponent;
 
-        PlateObject plate = new PlateObject("floor", "square_floor.png", width, depth, width, depth);
+        PlateObject plate = new PlateObject("floor", "square_floor.jpg", width, depth, width, depth);
         room.AddChild(plate);
 
         // left wall (X,0,0)

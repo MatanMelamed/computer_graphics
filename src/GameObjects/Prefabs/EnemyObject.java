@@ -39,7 +39,7 @@ public class EnemyObject extends GameObject {
                 , true);
         AddComponent(c);
 
-        WavefrontComponent o = new WavefrontComponent("gos", "png", 1f);
+        WavefrontComponent o = new WavefrontComponent("gos", "jpg", 1f);
         AddComponent(o);
 
         // model is built that way

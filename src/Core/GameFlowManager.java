@@ -55,13 +55,13 @@ public class GameFlowManager {
         lightObject.AddLight(new LightComponent(6, floats(0.2f, 0.2f, 0.2f, 1), floats(0.4f, 0.4f, 0.4f, 1), floats(0, 0, -1, 0)));
         screen.AddChild(lightObject);
 
-        victory = new PlateObject("victory", "victory.png", 1, 1, 16, 9);
+        victory = new PlateObject("victory", "victory.jpg", 1, 1, 16, 9);
         victory.Rotate(Axis.X, -90);
         victory.Move(0, 2000, 0);
         victory.Disable();
         screen.AddChild(victory);
 
-        defeat = new PlateObject("defeat", "defeat.png", 1, 1, 16, 9);
+        defeat = new PlateObject("defeat", "defeat.jpg", 1, 1, 16, 9);
         defeat.Rotate(Axis.X, -90);
         defeat.Move(0, 2000, 0);
         defeat.Disable();
@@ -70,7 +70,7 @@ public class GameFlowManager {
         levelLabels = new ArrayList<>();
         PlateObject plateObject;
         for (int i = 1; i <= levelManager.GetNumberOfLevels(); i++) {
-            plateObject = new PlateObject(String.valueOf(i), "level" + i + ".png", 1, 1, 16, 9);
+            plateObject = new PlateObject(String.valueOf(i), "level" + i + ".jpg", 1, 1, 16, 9);
             plateObject.Rotate(Axis.X, -90);
             plateObject.Move(0, 2000, 0);
             plateObject.Disable();

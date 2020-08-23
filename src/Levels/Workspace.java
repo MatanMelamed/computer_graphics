@@ -61,7 +61,7 @@ public class Workspace extends BaseLevel {
         AxisAlignedBoundingBox collider;
         ColliderComponent colliderComponent;
 
-        PlateObject plate = new PlateObject("floor", "square_floor.png", width, depth, width, depth);
+        PlateObject plate = new PlateObject("floor", "square_floor.jpg", width, depth, width, depth);
         room.AddChild(plate);
 
         // left wall (X,0,0)

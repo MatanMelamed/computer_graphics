@@ -25,7 +25,7 @@ public class CountdownScreen extends GameObject {
 
         screenNumbers = new ArrayList<>();
         for (int i = 1; i < 6; i++) {
-            PlateObject newScreen = new PlateObject(String.valueOf(i), i + ".png", 1, 1, 16, 9);
+            PlateObject newScreen = new PlateObject(String.valueOf(i), i + ".jpg", 1, 1, 16, 9);
             newScreen.Rotate(Axis.X, -90);
             newScreen.Move(0, 2000, 0);
             newScreen.Disable();

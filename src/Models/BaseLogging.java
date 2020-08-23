@@ -33,7 +33,7 @@ public final class BaseLogging {
     private static final String cLOGGING_OUTPUTFILENAME_PREFIX = "JOGAMP_FILELOG";
     private static final String cLOGGING_OUTPUTFILENAME_SUFFIX = ".txt";
     public static final String cLOGGING_CAPTUREOUTPUTFILENAME_PREFIX = "JOGAMP_SCREENCAPTURE";
-    public static final String cLOGGING_CAPTUREOUTPUTFILENAME_SUFFIX = ".png";
+    public static final String cLOGGING_CAPTUREOUTPUTFILENAME_SUFFIX = ".jpg";
     public static final String cLOGGING_CAPTUREOUTPUTDIRECTORYNAME = "capture\\";
     
     private static BaseLogging mLoggingInstance = null;
