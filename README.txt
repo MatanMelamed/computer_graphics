@@ -18,7 +18,7 @@ If you won the last level you will move to the next level \ back to level 1.
 If you lost the last level you will repeat it.
 
 Application Structure
-Core - the package that contains application components
+com.matan.studies.computergraphics.Core - the package that contains application components
 GameFramework starts the GameLoop which make calls per FPS.
 GameLoop invokes GameFramework calls of Update and Render,
 Rendering will go as:
@@ -34,7 +34,7 @@ Rendering one will render its components and then its children. Same goes for up
 Prefabs are custom game objects which answer a certain need.
 
 Level manager manages the leveling and setting the levels.
-lastly Models have usefull models for app such as Transform, Vector3D, ImageResource, WavefrontObjectLoader.
+lastly com.matan.studies.computergraphics.Models have usefull models for app such as Transform, Vector3D, ImageResource, WavefrontObjectLoader.
 
 This project was built by Matan Melamed except
 WavefrontObjectLoader_DisplayList class

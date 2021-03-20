@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.matan.studies</groupId>
+    <artifactId>computer-graphics</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
+        <resource.dir>${project.basedir}/src/main/resources</resource.dir>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>local-maven-repo</id>
+            <url>file:///${project.basedir}/local-maven-repo</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.computer.graphics</groupId>
+            <artifactId>jogl</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.computer.graphics</groupId>
+            <artifactId>glu</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.computer.graphics</groupId>
+            <artifactId>jogl-win</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.computer.graphics</groupId>
+            <artifactId>glurt</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.computer.graphics</groupId>
+            <artifactId>gluegenrt</artifactId>
+            <version>1.0</version>
+            <scope>runtime</scope>
+            <type>dll</type>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.computer.graphics</groupId>
+                            <artifactId>gluegenrt</artifactId>
+                            <version>1.0</version>
+                            <type>dll</type>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <destFileName>gluegen-rt.dll</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+
+                <configuration>
+                    <!--        Configure a class for executable jar        -->
+                    <archive>
+                        <manifest>
+                            <mainClass>com.matan.studies.computergraphics.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <!--          Points to the assembly descriptor to use          -->
+                    <descriptors>
+                        <descriptor>src/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+
+                <!--        Bind goal assembly:single into build process        -->
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

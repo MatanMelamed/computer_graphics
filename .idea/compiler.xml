@@ -14,5 +14,16 @@
       <entry name="!?*.obj" />
       <entry name="!?*.mtl" />
     </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Graphics" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Graphics" target="12" />
+    </bytecodeTargetLevel>
   </component>
 </project>
